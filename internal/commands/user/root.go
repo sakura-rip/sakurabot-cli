@@ -8,6 +8,8 @@ func UserCommand() *cobra.Command {
 		Use:   "user",
 		Short: "user management",
 	}
-	cmd.AddCommand()
+	cmd.AddCommand(
+		AddCommand(),
+	)
 	return cmd
 }
