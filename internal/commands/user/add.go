@@ -34,7 +34,7 @@ func (a *addParams) processParams(args []string) {
 
 }
 
-// runAddCommand execute "use add" command
+// runAddCommand execute "user add" command
 func runAddCommand(cmd *cobra.Command, args []string) {
 	addParam.processParams(args)
 
