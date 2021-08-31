@@ -5,7 +5,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func BuildCommands() (*cobra.Command, error) {
+// BuildAllCommands initialize all commands
+func BuildAllCommands() (*cobra.Command, error) {
 	rootCmd := &cobra.Command{
 		Use:   "sbcli",
 		Short: "A manager for sakura bot",
