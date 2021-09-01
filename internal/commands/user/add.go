@@ -96,6 +96,28 @@ func (p *addParams) processInteract(args []string) {
 	p.group = group
 }
 
+func (p *addParams) DBTags() []*database.Tag {
+	var tags []*database.Tag
+	for _, tagName := range p.tags {
+		var tag *database.Tag
+		result := database.Client.Where(&database.Tag{Name: tagName}).First(tag)
+		if result.RowsAffected == 0 {
+			tag = &database.Tag{Name: tagName}
+			database.Client.Create(tag)
+		}
+		tags = append(tags, tag)
+	}
+	return tags
+}
+
+func (p *addParams) DBMids() []*database.String {
+	var mids []*database.String
+	for _, m := range p.mids {
+		mids = append(mids, &database.String{Value: m})
+	}
+	return mids
+}
+
 // runAddCommand execute "user add" command
 func runAddCommand(cmd *cobra.Command, args []string) {
 	if pflag.NFlag() == 0 {
