@@ -34,7 +34,7 @@ type addParams struct {
 }
 
 // getFlagSet returns the flagSet for addParams
-func (a *addParams) getFlagSet() *pflag.FlagSet {
+func (p *addParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
 	fs.StringVarP(&addParam.name, "name", "n", "", "user name")
 	fs.StringArrayVarP(&addParam.tags, "tags", "t", []string{}, "tag names")
@@ -45,56 +45,56 @@ func (a *addParams) getFlagSet() *pflag.FlagSet {
 	return fs
 }
 
-func (a *addParams) validate() error {
-	return validator.New().Struct(a)
+func (p *addParams) validate() error {
+	return validator.New().Struct(p)
 }
 
 // processParams process parameters variable
-func (a *addParams) processParams(args []string) {
-	if err := a.validate(); err != nil {
+func (p *addParams) processParams(args []string) {
+	if err := p.validate(); err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
-func (a *addParams) processInteract(args []string) {
+func (p *addParams) processInteract(args []string) {
 	name, err := actor.Actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-	a.name = name
+	p.name = name
 
 	tags, err := actor.Actor.Prompt(actor.Input("user tags"))
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-	a.tags = strings.Split(tags, ",")
+	p.tags = strings.Split(tags, ",")
 
 	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-	a.mids = strings.Split(mids, ",")
+	p.mids = strings.Split(mids, ",")
 
 	email, err := actor.Actor.Prompt(actor.Input("user email"))
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
 
-	a.email = email
+	p.email = email
 
 	balance, err := actor.Actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(balance)
-	a.balance = n
+	p.balance = n
 
 	group, err := actor.Actor.PromptAndRetry(actor.Input("user group"), actor.CheckNotEmpty)
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-	a.group = group
+	p.group = group
 }
 
 // runAddCommand execute "user add" command
