@@ -10,6 +10,7 @@ func UserCommand() *cobra.Command {
 	}
 	cmd.AddCommand(
 		AddCommand(),
+		ListCommand(),
 	)
 	return cmd
 }
