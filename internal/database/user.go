@@ -49,3 +49,18 @@ func (u *User) Print() {
 	t.AppendSeparator()
 	t.Render()
 }
+
+func PrintUsers(users []*User) {
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"id", "name", "tags", "email", "balance", "group"})
+	var data []table.Row
+	for _, u := range users {
+		data = append(data, table.Row{
+			u.ID, u.Name, u.GetTags(), u.Email, u.Balance, u.Group,
+		})
+	}
+	t.AppendRows(data)
+	t.AppendSeparator()
+	t.Render()
+}
