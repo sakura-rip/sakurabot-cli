@@ -44,8 +44,8 @@ func (u *User) GetMids() []string {
 func (u *User) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"id", "name", "tags", "mids", "email", "balance", "group"})
-	t.AppendRows([]table.Row{{u.ID, u.Name, u.GetTags(), u.GetMids(), u.Email, u.Balance, u.Group}})
+	t.AppendHeader(table.Row{"id", "name", "tags", "email", "balance", "group"})
+	t.AppendRows([]table.Row{{u.ID, u.Name, u.GetTags(), u.Email, u.Balance, u.Group}})
 	t.AppendSeparator()
 	t.Render()
 }
