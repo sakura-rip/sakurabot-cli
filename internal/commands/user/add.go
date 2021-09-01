@@ -20,12 +20,23 @@ func AddCommand() *cobra.Command {
 
 // addParams add commands parameter
 type addParams struct {
+	name    string
+	tags    []string
+	mids    []string
+	email   string
+	balance int
+	group   string
 }
 
 // getFlagSet returns the flagSet for addParams
 func (a *addParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-
+	fs.StringVarP(&addParam.name, "name", "n", "", "user name")
+	fs.StringArrayVarP(&addParam.tags, "tags", "t", []string{}, "tag names")
+	fs.StringArrayVarP(&addParam.mids, "mids", "m", []string{}, "mids")
+	fs.StringVarP(&addParam.email, "email", "e", "", "email")
+	fs.IntVarP(&addParam.balance, "balance", "b", 0, "balance")
+	fs.StringVarP(&addParam.group, "group", "g", utils.GenUUID(), "specific group")
 	return fs
 }
 
