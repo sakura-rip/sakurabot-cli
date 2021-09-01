@@ -3,6 +3,7 @@ package database
 import (
 	"gorm.io/gorm"
 	"os"
+	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )
@@ -45,7 +46,7 @@ func (u *User) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"id", "name", "tags", "email", "balance", "group"})
-	t.AppendRows([]table.Row{{u.ID, u.Name, u.GetTags(), u.Email, u.Balance, u.Group}})
+	t.AppendRows([]table.Row{{u.ID, u.Name, strings.Join(u.GetTags(), ","), u.Email, u.Balance, u.Group}})
 	t.AppendSeparator()
 	t.Render()
 }
@@ -57,7 +58,7 @@ func PrintUsers(users []*User) {
 	var data []table.Row
 	for _, u := range users {
 		data = append(data, table.Row{
-			u.ID, u.Name, u.GetTags(), u.Email, u.Balance, u.Group,
+			u.ID, u.Name, strings.Join(u.GetTags(), ","), u.Email, u.Balance, u.Group,
 		})
 	}
 	t.AppendRows(data)
