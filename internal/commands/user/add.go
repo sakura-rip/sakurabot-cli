@@ -80,7 +80,6 @@ func (p *addParams) processInteract(args []string) {
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-
 	p.email = email
 
 	balance, err := actor.Actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
@@ -90,7 +89,7 @@ func (p *addParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
-	group, err := actor.Actor.PromptAndRetry(actor.Input("user group"), actor.CheckNotEmpty)
+	group, err := actor.Actor.PromptOptionalAndRetry(actor.Input("user group"), utils.GenUUID(), actor.CheckNotEmpty)
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
