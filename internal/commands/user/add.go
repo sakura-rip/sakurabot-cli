@@ -1,8 +1,12 @@
 package user
 
 import (
+	"github.com/sakura-rip/sakurabot-cli/internal/actor"
+	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"strconv"
+	"strings"
 )
 
 var addParam = new(addParams)
@@ -43,6 +47,47 @@ func (a *addParams) getFlagSet() *pflag.FlagSet {
 // processParams process parameters variable
 func (a *addParams) processParams(args []string) {
 
+}
+
+// processInteract process interact parameter initializer
+func (a *addParams) processInteract(args []string) {
+	name, err := actor.Actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+	a.name = name
+
+	tags, err := actor.Actor.Prompt(actor.Input("user tags"))
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+	a.tags = strings.Split(tags, ",")
+
+	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+	a.mids = strings.Split(mids, ",")
+
+	email, err := actor.Actor.Prompt(actor.Input("user email"))
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+
+	a.email = email
+
+	balance, err := actor.Actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+	n, _ := strconv.Atoi(balance)
+	a.balance = n
+
+	group, err := actor.Actor.PromptAndRetry(actor.Input("user group"), actor.CheckNotEmpty)
+	if err != nil {
+		utils.Logger.Error().Err(err).Msg("")
+	}
+	a.group = group
 }
 
 // runAddCommand execute "user add" command
