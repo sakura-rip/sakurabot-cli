@@ -47,6 +47,9 @@ func (a *addParams) processParams(args []string) {
 
 // runAddCommand execute "user add" command
 func runAddCommand(cmd *cobra.Command, args []string) {
+	if pflag.NFlag() == 0 {
+		addParam.processInteract(args)
+	}
 	addParam.processParams(args)
 
 }
