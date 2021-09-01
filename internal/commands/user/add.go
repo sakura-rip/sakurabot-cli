@@ -5,6 +5,7 @@ import (
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"gopkg.in/go-playground/validator.v9"
 	"strconv"
 	"strings"
 )
@@ -24,12 +25,12 @@ func AddCommand() *cobra.Command {
 
 // addParams add commands parameter
 type addParams struct {
-	name    string
+	name    string `validate:"required,gt=0,lt=20"`
 	tags    []string
 	mids    []string
 	email   string
 	balance int
-	group   string
+	group   string `validate:"required,gt=0,lt=34"`
 }
 
 // getFlagSet returns the flagSet for addParams
@@ -44,9 +45,15 @@ func (a *addParams) getFlagSet() *pflag.FlagSet {
 	return fs
 }
 
+func (a *addParams) validate() error {
+	return validator.New().Struct(a)
+}
+
 // processParams process parameters variable
 func (a *addParams) processParams(args []string) {
-
+	if err := a.validate(); err != nil {
+		utils.Logger.Fatal().Err(err).Msg("")
+	}
 }
 
 // processInteract process interact parameter initializer
