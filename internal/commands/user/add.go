@@ -60,38 +60,38 @@ func (p *addParams) processParams(args []string) {
 func (p *addParams) processInteract(args []string) {
 	name, err := actor.Actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
 	tags, err := actor.Actor.Prompt(actor.Input("user tags"))
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.tags = strings.Split(tags, ",")
 
 	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.mids = strings.Split(mids, ",")
 
 	email, err := actor.Actor.Prompt(actor.Input("user email"))
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
 	balance, err := actor.Actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
 	group, err := actor.Actor.PromptOptionalAndRetry(actor.Input("user group"), utils.GenUUID(), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
