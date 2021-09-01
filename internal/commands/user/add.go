@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
+	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -125,4 +126,17 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	}
 	addParam.processParams(args)
 
+	user := &database.User{
+		Name:    addParam.name,
+		Tags:    addParam.DBTags(),
+		Mids:    addParam.DBMids(),
+		Email:   addParam.email,
+		Balance: addParam.balance,
+		Group:   addParam.group,
+	}
+	result := database.Client.Create(user)
+	if result.Error != nil {
+		utils.Logger.Fatal().Err(result.Error).Msg("")
+	}
+	user.Print()
 }
