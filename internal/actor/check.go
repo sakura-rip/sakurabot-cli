@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// CheckNotEmpty check null input
 func CheckNotEmpty(input string) error {
 	if input == "" {
 		return errors.New("input should not be empty")
@@ -12,6 +13,7 @@ func CheckNotEmpty(input string) error {
 	return nil
 }
 
+// CheckIsAPositiveNumber check is positive number
 func CheckIsAPositiveNumber(input string) error {
 	if n, err := strconv.Atoi(input); err != nil {
 		return err
