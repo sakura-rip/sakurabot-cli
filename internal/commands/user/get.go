@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
+	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -98,4 +99,45 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 	}
 	getParam.processParams(args)
 
+	query := database.Client
+	if getParam.name != "" {
+		query = query.Where("name LIKE ?", "%"+getParam.name+"%")
+	}
+	if getParam.email != "" {
+		query = query.Where("email LIKE ?", "%"+getParam.email+"%")
+	}
+	if getParam.group != "" {
+		query = query.Where("group LIKE ?", "%"+getParam.group+"%")
+	}
+	searchTags := len(getParam.tags) != 0
+	if searchTags {
+		query = query.Preload("Tags", "name IN ? ", getParam.tags)
+	} else {
+		query = query.Preload("Tags")
+	}
+	searchMids := len(getParam.mids) != 0
+	if searchMids {
+		query = query.Preload("Mids", "value IN ? ", getParam.mids)
+	} else {
+		query = query.Preload("Mids")
+	}
+	var users []*database.User
+	if query.Find(&users).RowsAffected == 0 {
+		utils.Logger.Fatal().Msg("no users found")
+	}
+
+	var resultUsers []*database.User
+	for _, user := range users {
+		if searchTags && len(user.Tags) == 0 {
+			continue
+		}
+		if searchMids && len(user.Mids) == 0 {
+			continue
+		}
+		resultUsers = append(resultUsers, user)
+	}
+	if len(resultUsers) == 0 {
+		utils.Logger.Fatal().Msg("no users found")
+	}
+	database.PrintUsers(resultUsers)
 }
