@@ -42,7 +42,7 @@ func (p *addParams) getFlagSet() *pflag.FlagSet {
 	fs.StringArrayVarP(&addParam.mids, "mids", "m", []string{}, "mids")
 	fs.StringVarP(&addParam.email, "email", "e", "", "email")
 	fs.IntVarP(&addParam.balance, "balance", "b", 0, "balance")
-	fs.StringVarP(&addParam.group, "group", "g", utils.GenUUID(), "specific group")
+	fs.StringVarP(&addParam.group, "group", "g", "", "specific group")
 	return fs
 }
 
