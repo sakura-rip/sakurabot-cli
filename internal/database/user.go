@@ -26,6 +26,7 @@ type User struct {
 	Group   string
 }
 
+// GetTags return the string array of user tag
 func (u *User) GetTags() []string {
 	var tags []string
 	for _, t := range u.Tags {
@@ -34,6 +35,7 @@ func (u *User) GetTags() []string {
 	return tags
 }
 
+// GetMids return the string array of user mid
 func (u *User) GetMids() []string {
 	var mids []string
 	for _, m := range u.Mids {
@@ -42,6 +44,7 @@ func (u *User) GetMids() []string {
 	return mids
 }
 
+// Print output user information to console
 func (u *User) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
@@ -51,6 +54,7 @@ func (u *User) Print() {
 	t.Render()
 }
 
+// PrintUsers output users information given to args to console
 func PrintUsers(users []*User) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
