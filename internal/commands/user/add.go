@@ -69,13 +69,17 @@ func (p *addParams) processInteract(args []string) {
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
-	p.tags = strings.Split(tags, ",")
+	if tags != "" {
+		p.tags = strings.Split(tags, ",")
+	}
 
 	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
-	p.mids = strings.Split(mids, ",")
+	if mids != "" {
+		p.mids = strings.Split(mids, ",")
+	}
 
 	email, err := actor.Actor.Prompt(actor.Input("user email"))
 	if err != nil {
