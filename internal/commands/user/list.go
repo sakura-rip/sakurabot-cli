@@ -52,7 +52,7 @@ func (p *listParams) processInteract(args []string) {
 
 // runListCommand execute "user list" command
 func runListCommand(cmd *cobra.Command, args []string) {
-	if pflag.NFlag() == 0 {
+	if cmd.Flags().NFlag() == 0 {
 		listParam.processInteract(args)
 	}
 	listParam.processParams(args)

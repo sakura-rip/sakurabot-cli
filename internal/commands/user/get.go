@@ -93,7 +93,7 @@ func (p *getParams) processInteract(args []string) {
 
 // runGetCommand execute "user get" command
 func runGetCommand(cmd *cobra.Command, args []string) {
-	if pflag.NFlag() == 0 {
+	if cmd.Flags().NFlag() == 0 {
 		getParam.processInteract(args)
 	}
 	getParam.processParams(args)
