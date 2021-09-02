@@ -24,11 +24,11 @@ func GetCommand() *cobra.Command {
 
 // getParams add commands parameter
 type getParams struct {
-	tags   []string
-	groups []string
-	name   string
-	mids   []string
-	email  string
+	tags  []string
+	group string
+	name  string
+	mids  []string
+	email string
 }
 
 // getFlagSet returns the flagSet for getParams
@@ -38,7 +38,7 @@ func (p *getParams) getFlagSet() *pflag.FlagSet {
 	fs.StringVarP(&getParam.email, "email", "e", "", "user email")
 	fs.StringArrayVarP(&getParam.tags, "tags", "t", []string{}, "user tags")
 	fs.StringArrayVarP(&getParam.mids, "mids", "m", []string{}, "user mids")
-	fs.StringArrayVarP(&getParam.groups, "groups", "g", []string{}, "user groups")
+	fs.StringVarP(&getParam.group, "group", "g", "", "user group")
 	return fs
 }
 
@@ -84,13 +84,11 @@ func (p *getParams) processInteract(args []string) {
 		p.mids = strings.Split(mids, ",")
 	}
 
-	groups, err := actor.Actor.Prompt(actor.Input("user groups"))
+	group, err := actor.Actor.Prompt(actor.Input("user group"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
-	if groups != "" {
-		p.groups = strings.Split(groups, ",")
-	}
+	p.group = group
 }
 
 // runGetCommand execute "user get" command
