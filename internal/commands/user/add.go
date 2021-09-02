@@ -90,7 +90,7 @@ func (p *addParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
-	group, err := actor.Actor.PromptOptional(actor.Input("user group"), "")
+	group, err := actor.Actor.Prompt(actor.Input("user group"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
