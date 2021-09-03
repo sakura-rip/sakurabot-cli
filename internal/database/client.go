@@ -2,7 +2,6 @@ package database
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
-	"github.com/spf13/cobra"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -10,13 +9,7 @@ import (
 	"os"
 )
 
-func getHomeDir() string {
-	home, err := os.UserHomeDir()
-	cobra.CheckErr(err)
-	return home
-}
-
-var Client = NewDatabase(getHomeDir()+"/.sakurabot-manager.db", false)
+var Client = NewDatabase(utils.GetHomeDir()+"/.sakurabot-manager.db", false)
 
 func NewDatabase(path string, useMySql bool) *gorm.DB {
 	var db *gorm.DB
