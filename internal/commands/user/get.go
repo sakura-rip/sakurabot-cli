@@ -93,6 +93,7 @@ func (p *getParams) processInteract(args []string) {
 	p.group = group
 }
 
+// buildDatabaseQuery return the query for database search
 func (p *getParams) buildDatabaseQuery() *gorm.DB {
 	query := database.Client
 	if getParam.name != "" {
