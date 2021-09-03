@@ -10,6 +10,7 @@ func TagCommand() *cobra.Command {
 	}
 	cmd.AddCommand(
 		AddCommand(),
+		RemoveCommand(),
 	)
 	return cmd
 }
