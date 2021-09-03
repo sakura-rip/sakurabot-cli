@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
+	"gorm.io/gorm"
 	"strings"
 )
 
@@ -92,13 +93,7 @@ func (p *getParams) processInteract(args []string) {
 	p.group = group
 }
 
-// runGetCommand execute "user get" command
-func runGetCommand(cmd *cobra.Command, args []string) {
-	if cmd.Flags().NFlag() == 0 {
-		getParam.processInteract(args)
-	}
-	getParam.processParams(args)
-
+func (p *getParams) buildDatabaseQuery() *gorm.DB {
 	query := database.Client
 	if getParam.name != "" {
 		query = query.Where("name LIKE ?", "%"+getParam.name+"%")
@@ -109,29 +104,37 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 	if getParam.group != "" {
 		query = query.Where("group LIKE ?", "%"+getParam.group+"%")
 	}
-	searchTags := len(getParam.tags) != 0
-	if searchTags {
+	if len(getParam.tags) != 0 {
 		query = query.Preload("Tags", "name IN ? ", getParam.tags)
 	} else {
 		query = query.Preload("Tags")
 	}
-	searchMids := len(getParam.mids) != 0
-	if searchMids {
+	if len(getParam.mids) != 0 {
 		query = query.Preload("Mids", "value IN ? ", getParam.mids)
 	} else {
 		query = query.Preload("Mids")
 	}
+	return query
+}
+
+// runGetCommand execute "user get" command
+func runGetCommand(cmd *cobra.Command, args []string) {
+	if cmd.Flags().NFlag() == 0 {
+		getParam.processInteract(args)
+	}
+	getParam.processParams(args)
+
 	var users []*database.User
-	if query.Find(&users).RowsAffected == 0 {
+	if getParam.buildDatabaseQuery().Find(&users).RowsAffected == 0 {
 		utils.Logger.Fatal().Msg("no users found")
 	}
-
+	//validate tags and mids
 	var resultUsers []*database.User
 	for _, user := range users {
-		if searchTags && len(user.Tags) == 0 {
+		if len(getParam.tags) != 0 && len(user.Tags) == 0 {
 			continue
 		}
-		if searchMids && len(user.Mids) == 0 {
+		if len(getParam.mids) != 0 && len(user.Mids) == 0 {
 			continue
 		}
 		resultUsers = append(resultUsers, user)
