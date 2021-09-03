@@ -1,6 +1,9 @@
 package user
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/sakura-rip/sakurabot-cli/internal/commands/user/tag"
+	"github.com/spf13/cobra"
+)
 
 // UserCommand creates the "user" command
 func UserCommand() *cobra.Command {
@@ -13,6 +16,7 @@ func UserCommand() *cobra.Command {
 		ListCommand(),
 		GetCommand(),
 		ChargeCommand(),
+		tag.TagCommand(),
 	)
 	return cmd
 }

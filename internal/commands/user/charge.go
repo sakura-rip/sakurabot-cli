@@ -53,7 +53,7 @@ func (p *chargeParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *chargeParams) processInteract(args []string) {
-	uid, err := actor.Actor.PromptAndRetry(actor.Input("user id "), actor.CheckNotEmpty, func(s string) error {
+	uid, err := actor.Actor.PromptAndRetry(actor.Input("user id "), actor.CheckIsAPositiveNumber, func(s string) error {
 		user, err := database.GetUser(s)
 		if err != nil {
 			return err
