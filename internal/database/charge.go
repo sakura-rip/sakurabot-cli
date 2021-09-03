@@ -12,7 +12,7 @@ const (
 	ChargeType_BTC            ChargeType = "btc"
 	ChargeType_LITE_COIN      ChargeType = "ltc"
 	ChargeType_KYASH          ChargeType = "kyash"
-	ChargeType_MERUPAY        ChargeType = "perupay"
+	ChargeType_MERUPAY        ChargeType = "merupay"
 	ChargeType_AMAZON_GIFT    ChargeType = "amazon"
 )
 
