@@ -69,3 +69,12 @@ func PrintUsers(users []*User) {
 	t.AppendSeparator()
 	t.Render()
 }
+
+func GetUser(id interface{}) (*User, error) {
+	var user *User
+	result := Client.Preload(clause.Associations).First(&user, id)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("no user found")
+	}
+	return user, nil
+}
