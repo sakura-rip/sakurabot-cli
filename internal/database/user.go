@@ -1,7 +1,9 @@
 package database
 
 import (
+	"errors"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"os"
 	"strings"
 
@@ -21,6 +23,7 @@ type User struct {
 	Name    string    `gorm:"unique"`
 	Tags    []*Tag    `gorm:"many2many:user_tag"`
 	Mids    []*String `gorm:"foreignKey:Referer"`
+	Charges []*Charge `gorm:"foreignKey:UserId"`
 	Email   string
 	Balance int
 	Group   string
