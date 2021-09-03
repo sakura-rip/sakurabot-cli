@@ -1,7 +1,6 @@
 package user
 
 import (
-	"errors"
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
@@ -69,12 +68,8 @@ func (p *chargeParams) processInteract(args []string) {
 	p.userId = u
 
 	amount, err := actor.Actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
-		if n, err := strconv.Atoi(s); err != nil {
-			return err
-		} else if n <= 0 {
-			return errors.New("the amount must be at least 1")
-		}
-		return nil
+		_, err := strconv.Atoi(s)
+		return err
 	})
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
@@ -114,4 +109,5 @@ func runChargeCommand(cmd *cobra.Command, args []string) {
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
+	utils.Logger.Info().Msgf("DONE: update amount to user:[%v]  %v JPY ", user.Name, chargeParam.amount)
 }
