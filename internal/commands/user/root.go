@@ -12,6 +12,7 @@ func UserCommand() *cobra.Command {
 		AddCommand(),
 		ListCommand(),
 		GetCommand(),
+		ChargeCommand(),
 	)
 	return cmd
 }
