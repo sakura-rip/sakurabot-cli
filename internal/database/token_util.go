@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// PrintTokens output tokens information given to args to console
 func PrintTokens(tokens []*Token) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
