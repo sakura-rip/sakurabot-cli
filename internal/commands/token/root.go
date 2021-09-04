@@ -10,6 +10,8 @@ func TokenCommand() *cobra.Command {
 		Use:   "token",
 		Short: "token management",
 	}
-	cmd.AddCommand()
+	cmd.AddCommand(
+		CreateCommand(),
+	)
 	return cmd
 }
