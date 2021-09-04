@@ -73,13 +73,13 @@ func (p *createParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
-	appType, err := actor.Actor.PromptOptional("appType", "android")
+	appType, err := actor.Actor.PromptOptional(actor.Input("appType"), "android")
 	if err != nil {
 		utils.Logger.Fatal().Err(err)
 	}
 	p.appType = appType
 
-	tags, err := actor.Actor.Prompt("tags")
+	tags, err := actor.Actor.Prompt(actor.Input("tags"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err)
 	}
@@ -87,7 +87,7 @@ func (p *createParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	group, err := actor.Actor.Prompt("group")
+	group, err := actor.Actor.Prompt(actor.Input("group"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err)
 	}
