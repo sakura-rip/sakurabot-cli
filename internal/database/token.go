@@ -14,3 +14,12 @@ type Token struct {
 	Group  string
 	Tags   []*Tag `gorm:"many2many:tokens_tag;"`
 }
+
+// GetTags return the string array of user tag
+func (u *Token) GetTags() []string {
+	var tags []string
+	for _, t := range u.Tags {
+		tags = append(tags, t.Name)
+	}
+	return tags
+}
