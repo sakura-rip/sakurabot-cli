@@ -103,9 +103,9 @@ func runChargeCommand(cmd *cobra.Command, args []string) {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	user.Balance += chargeParam.amount
-	database.Client.Save(user)
+	database.Save(user)
 
-	err = database.Client.Model(user).Association("Charges").Append(charge)
+	err = database.Model(user).Association("Charges").Append(charge)
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}

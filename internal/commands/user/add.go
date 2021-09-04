@@ -124,7 +124,7 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 		Balance: addParam.balance,
 		Group:   addParam.group,
 	}
-	result := database.Client.Create(user)
+	result := database.Create(user)
 	if result.Error != nil {
 		utils.Logger.Fatal().Err(result.Error).Msg("")
 	}

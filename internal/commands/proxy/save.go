@@ -99,7 +99,7 @@ func runSaveCommand(cmd *cobra.Command, args []string) {
 		proxies = parseBrightDataDataCenterFormat(saveParam.textPath)
 	}
 	for _, p := range proxies {
-		result := database.Client.Create(&p)
+		result := database.Create(&p)
 		if result.Error != nil {
 			utils.Logger.Error().Err(result.Error).Msg("")
 		}

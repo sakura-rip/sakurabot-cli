@@ -79,7 +79,7 @@ func (p *getParams) processInteract(args []string) {
 
 // buildDatabaseQuery return the query for database search
 func (p *getParams) buildDatabaseQuery() *gorm.DB {
-	query := database.Client.Limit(getParam.count)
+	query := database.Limit(getParam.count)
 	if getParam.group != "" {
 		query = query.Where("group LIKE ?", "%"+getParam.group+"%")
 	}

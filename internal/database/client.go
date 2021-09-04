@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-var Client = NewDatabase(utils.GetHomeDir()+"/.sakurabot-manager.db", false)
+var DefaultClient = NewDatabase(utils.GetHomeDir()+"/.sakurabot-manager.db", false)
 
 func NewDatabase(path string, useMySql bool) *gorm.DB {
 	var db *gorm.DB
@@ -31,4 +31,34 @@ func NewDatabase(path string, useMySql bool) *gorm.DB {
 		utils.Logger.Error().Err(err).Msg("")
 	}
 	return db
+}
+
+// Where add conditions
+func Where(query interface{}, args ...interface{}) *gorm.DB {
+	return DefaultClient.Where(query, args)
+}
+
+// Limit specify the number of records to be retrieved
+func Limit(c int) *gorm.DB {
+	return DefaultClient.Limit(c)
+}
+
+// Create insert the value into database
+func Create(value interface{}) *gorm.DB {
+	return DefaultClient.Create(value)
+}
+
+// Save update value in database, if the value doesn't have primary key, will insert it
+func Save(value interface{}) *gorm.DB {
+	return DefaultClient.Save(value)
+}
+
+// Model specify the model you would like to run db operations
+func Model(value interface{}) *gorm.DB {
+	return DefaultClient.Model(value)
+}
+
+// Preload associations with given conditions
+func Preload(query string, args ...interface{}) *gorm.DB {
+	return DefaultClient.Preload(query, args)
 }

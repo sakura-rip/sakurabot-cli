@@ -57,6 +57,6 @@ func runListCommand(cmd *cobra.Command, args []string) {
 	}
 	listParam.processParams(args)
 	var users []*database.User
-	database.Client.Preload(clause.Associations).Find(&users)
+	database.Preload(clause.Associations).Find(&users)
 	database.PrintUsers(users)
 }

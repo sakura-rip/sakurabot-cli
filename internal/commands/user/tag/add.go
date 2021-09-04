@@ -79,10 +79,10 @@ func (p *addParams) DBTags() []*database.Tag {
 	var tags []*database.Tag
 	for _, tagName := range p.tags {
 		var tag *database.Tag
-		result := database.Client.Where(&database.Tag{Name: tagName}).First(tag)
+		result := database.Where(&database.Tag{Name: tagName}).First(tag)
 		if result.RowsAffected == 0 {
 			tag = &database.Tag{Name: tagName}
-			database.Client.Create(tag)
+			database.Create(tag)
 		}
 		tags = append(tags, tag)
 	}
@@ -99,7 +99,7 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
-	err = database.Client.Model(user).Association("Tags").Append(addParam.DBTags())
+	err = database.Model(user).Association("Tags").Append(addParam.DBTags())
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}

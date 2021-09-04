@@ -95,7 +95,7 @@ func (p *getParams) processInteract(args []string) {
 
 // buildDatabaseQuery return the query for database search
 func (p *getParams) buildDatabaseQuery() *gorm.DB {
-	query := database.Client
+	query := database.DefaultClient
 	if getParam.name != "" {
 		query = query.Where("name LIKE ?", "%"+getParam.name+"%")
 	}

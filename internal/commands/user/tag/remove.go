@@ -99,7 +99,7 @@ func runRemoveCommand(cmd *cobra.Command, args []string) {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
 
-	err = database.Client.Model(user).Association("Tags").Delete(removeParam.getMatchedTags(user.Tags))
+	err = database.Model(user).Association("Tags").Delete(removeParam.getMatchedTags(user.Tags))
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}

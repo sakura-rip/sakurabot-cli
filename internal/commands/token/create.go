@@ -146,13 +146,13 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 			}
 			successCount++
 			utils.Logger.Info().Int("idx", i).Msgf("successfully create account %v/%v", successCount, createParam.count)
-			database.Client.Create(&database.Token{
+			database.Create(&database.Token{
 				Account: result,
 				Group:   createParam.group,
 				Tags:    database.StringsToDBTags(createParam.tags),
 			})
 			proxy.IsUsed = true
-			database.Client.Save(proxy)
+			database.Save(proxy)
 		}()
 		time.Sleep(time.Second * 5)
 	}
