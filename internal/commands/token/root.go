@@ -7,8 +7,8 @@ import (
 // TokenCommand creates the "token" command
 func TokenCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "user",
-		Short: "user management",
+		Use:   "token",
+		Short: "token management",
 	}
 	cmd.AddCommand()
 	return cmd
