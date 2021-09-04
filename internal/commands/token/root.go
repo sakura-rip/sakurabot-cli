@@ -12,6 +12,7 @@ func TokenCommand() *cobra.Command {
 	}
 	cmd.AddCommand(
 		CreateCommand(),
+		GetCommand(),
 	)
 	return cmd
 }
