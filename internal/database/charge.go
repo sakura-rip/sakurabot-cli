@@ -16,6 +16,7 @@ const (
 	ChargeType_AMAZON_GIFT    ChargeType = "amazon"
 )
 
+// Charge database table for charge
 type Charge struct {
 	*gorm.Model
 
