@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Token database table for token
 type Token struct {
 	*gorm.Model
 	*generator.Account

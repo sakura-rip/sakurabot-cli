@@ -2,6 +2,7 @@ package database
 
 import "gorm.io/gorm"
 
+// Tag database table for tag
 type Tag struct {
 	*gorm.Model
 	Name        string `gorm:"unique"`

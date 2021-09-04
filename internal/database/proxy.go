@@ -2,6 +2,7 @@ package database
 
 import "gorm.io/gorm"
 
+// Proxy database table for proxy
 type Proxy struct {
 	*gorm.Model
 	URL    string

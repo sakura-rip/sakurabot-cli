@@ -5,6 +5,7 @@ import (
 	"net/url"
 )
 
+// GetRandomFreeProxy returns array of unused proxies
 func GetRandomFreeProxy(count int) []*Proxy {
 	var proxies []*Proxy
 	result := Client.Limit(count).Where(map[string]interface{}{"is_used": false}).Find(&proxies)
@@ -14,6 +15,7 @@ func GetRandomFreeProxy(count int) []*Proxy {
 	return proxies
 }
 
+// ParseProxyUrl parse proxy url to database table Proxy
 func ParseProxyUrl(proxy string) *Proxy {
 	u, _ := url.Parse(proxy)
 	password, _ := u.User.Password()
