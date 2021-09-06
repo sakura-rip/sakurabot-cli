@@ -65,7 +65,7 @@ func (p *createParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(ipCount)
 	p.ipCount = n
 
-	tags, err := actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt("server tags")
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
