@@ -62,6 +62,9 @@ func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
+	if createParam.count <= 0 {
+		utils.Logger.Fatal().Msgf("count must be at least 1")
+	}
 }
 
 // processInteract process interact parameter initializer
@@ -120,9 +123,6 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 		createParam.processInteract(args)
 	}
 	createParam.processParams(args)
-	if createParam.count <= 0 {
-		utils.Logger.Fatal().Msgf("count must be at least 1")
-	}
 	var successCount int
 	wg := &sync.WaitGroup{}
 	for i := 0; i < createParam.count; i++ {
