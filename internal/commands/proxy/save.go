@@ -80,7 +80,7 @@ func parseBrightDataDataCenterFormat(path string) []*database.Proxy {
 			Password: password,
 			Host:     host,
 			Port:     port,
-			IP:       strings.Split(userId, "ip-")[1],
+			IP:       userId[3:],
 		})
 	}
 	return proxies
