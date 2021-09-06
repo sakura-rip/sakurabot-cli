@@ -103,5 +103,5 @@ func runRemoveCommand(cmd *cobra.Command, args []string) {
 	if err != nil {
 		utils.Logger.Error().Err(err).Msg("")
 	}
-	utils.Logger.Info().Msgf("DONE: remove %v tags to user: [%v]", len(removeParam.tags), user.Name)
+	utils.Logger.Info().Msgf("DONE: remove %v tags from user: [%v]", len(removeParam.tags), user.Name)
 }
