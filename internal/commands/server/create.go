@@ -52,7 +52,7 @@ func (p *createParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *createParams) processInteract(args []string) {
-	serverType, err := actor.PromptOptional("server type", "upcloud")
+	serverType, err := actor.PromptOptional("server type (upcloud | vultr)", "upcloud")
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msgf("")
 	}
