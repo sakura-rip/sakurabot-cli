@@ -23,7 +23,9 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/pflag v1.0.5
 	github.com/valyala/fasthttp v1.29.0 // indirect
+	github.com/vultr/govultr/v2 v2.8.1
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
+	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
 	golang.org/x/sys v0.0.0-20210903071746-97244b99971b // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0
