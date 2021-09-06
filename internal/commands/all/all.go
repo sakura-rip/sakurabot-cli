@@ -2,6 +2,7 @@ package all
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/commands/proxy"
+	"github.com/sakura-rip/sakurabot-cli/internal/commands/server"
 	"github.com/sakura-rip/sakurabot-cli/internal/commands/token"
 	"github.com/sakura-rip/sakurabot-cli/internal/commands/user"
 	"github.com/spf13/cobra"
@@ -18,6 +19,7 @@ func BuildAllCommands() (*cobra.Command, error) {
 		user.NewCommand(),
 		token.NewCommand(),
 		proxy.NewCommand(),
+		server.NewCommand(),
 	)
 
 	return rootCmd, nil
