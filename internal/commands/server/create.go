@@ -54,6 +54,11 @@ func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
+	if p.serverName == "" {
+		uid := "pro-bot-" + utils.GenUUID()[:5]
+		utils.Logger.Info().Msgf("server name not given. use: %v", uid)
+		p.serverName = uid
+	}
 }
 
 // processInteract process interact parameter initializer
