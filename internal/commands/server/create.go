@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
+	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -74,6 +75,16 @@ func (p *createParams) processInteract(args []string) {
 	}
 }
 
+// createVultrServer create vultr server for createParams value
+func (p *createParams) createVultrServer() (*database.Server, error) {
+	return nil, nil
+}
+
+// createUpcloudServer create upcloud server for createParams value
+func (p *createParams) createUpcloudServer() (*database.Server, error) {
+	return nil, nil
+}
+
 // runCreateCommand execute "server create" command
 func runCreateCommand(cmd *cobra.Command, args []string) {
 	if cmd.Flags().NFlag() == 0 {
@@ -81,4 +92,20 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 	}
 	createParam.processParams(args)
 
+	var server *database.Server
+	var createErr error
+	switch createParam.serverType {
+	case "vultr":
+		server, createErr = createParam.createVultrServer()
+	case "upcloud":
+		server, createErr = createParam.createUpcloudServer()
+	default:
+		utils.Logger.Fatal().Msgf("invalid server type")
+	}
+	if createErr != nil {
+		utils.Logger.Fatal().Err(createErr).Msgf("failed to create server")
+	}
+
+	database.Create(&server)
+	utils.Logger.Info().Msgf("create server done")
 }
