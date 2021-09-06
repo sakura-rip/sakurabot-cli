@@ -1,6 +1,8 @@
 package server
 
 import (
+	"github.com/UpCloudLtd/upcloud-go-api/upcloud"
+	"github.com/UpCloudLtd/upcloud-go-api/upcloud/request"
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
@@ -90,8 +92,49 @@ func (p *createParams) createVultrServer() (*database.Server, error) {
 	return nil, nil
 }
 
+// asUpcloudIpAddressSlice returns the array of ip address for upcloud server
+func (p *createParams) asUpcloudIpAddressSlice() request.CreateServerInterfaceSlice {
+	var ips request.CreateServerInterfaceSlice
+	for i := 0; i < p.ipCount; i++ {
+		ips = append(ips, request.CreateServerInterface{
+			IPAddresses: []request.CreateServerIPAddress{{
+				Family: upcloud.IPAddressFamilyIPv4,
+			}},
+			Type: upcloud.IPAddressAccessPublic,
+		})
+	}
+	return ips
+}
+
+func (p *createParams) getSSHKey() string {
+	if p.sshKeyPath == "" {
+		//TODO: use github.com/lxn/walk
+		return ""
+	}
+	return p.sshKeyPath
+}
+
 // createUpcloudServer create upcloud server for createParams value
 func (p *createParams) createUpcloudServer() (*database.Server, error) {
+	cl := utils.NewUpcloudClient()
+	//TODO: handle create server
+	_, err := cl.CreateServer(&request.CreateServerRequest{
+		Hostname: "sakura-bot",
+		Networking: &request.CreateServerNetworking{
+			Interfaces: createParam.asUpcloudIpAddressSlice(),
+		},
+		LoginUser: &request.LoginUser{
+			CreatePassword: "no",
+			SSHKeys:        []string{createParam.getSSHKey()},
+		},
+		Plan:     "1xCPU-1GB",
+		Title:    createParam.serverName,
+		Zone:     "pl-waw1",
+		Metadata: upcloud.True,
+	})
+	if err != nil {
+		return nil, err
+	}
 	return nil, nil
 }
 
