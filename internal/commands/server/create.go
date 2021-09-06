@@ -28,7 +28,8 @@ func CreateCommand() *cobra.Command {
 type createParams struct {
 	serverType string `validate:"oneof=upcloud vultr"`
 	sshKeyPath string
-	ipCount    int
+	serverName string
+	ipCount    int `validate:"gte=1,lt=6"`
 	tags       []string
 }
 
