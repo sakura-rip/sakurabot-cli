@@ -58,19 +58,19 @@ func (p *getParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *getParams) processInteract(args []string) {
-	name, err := actor.Actor.Prompt(actor.Input("user name"))
+	name, err := actor.Prompt(actor.Input("user name"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
-	email, err := actor.Actor.Prompt(actor.Input("user email"))
+	email, err := actor.Prompt(actor.Input("user email"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
-	tags, err := actor.Actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt(actor.Input("user tags"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
@@ -78,7 +78,7 @@ func (p *getParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
+	mids, err := actor.Prompt(actor.Input("user mids"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
@@ -86,7 +86,7 @@ func (p *getParams) processInteract(args []string) {
 		p.mids = strings.Split(mids, ",")
 	}
 
-	group, err := actor.Actor.Prompt(actor.Input("user group"))
+	group, err := actor.Prompt(actor.Input("user group"))
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}

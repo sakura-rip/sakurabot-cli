@@ -52,7 +52,7 @@ func (p *removeParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *removeParams) processInteract(args []string) {
-	userId, err := actor.Actor.PromptAndRetry(actor.Input("user id"), actor.CheckIsAPositiveNumber, func(s string) error {
+	userId, err := actor.PromptAndRetry(actor.Input("user id"), actor.CheckIsAPositiveNumber, func(s string) error {
 		user, err := database.GetUser(s)
 		if err != nil {
 			return err
@@ -65,7 +65,7 @@ func (p *removeParams) processInteract(args []string) {
 	}
 	n, _ := strconv.Atoi(userId)
 	p.userId = n
-	tags, err := actor.Actor.PromptAndRetry(actor.Input("user tags"), actor.CheckNotEmpty)
+	tags, err := actor.PromptAndRetry(actor.Input("user tags"), actor.CheckNotEmpty)
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}

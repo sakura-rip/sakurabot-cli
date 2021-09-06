@@ -53,7 +53,7 @@ func (p *chargeParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *chargeParams) processInteract(args []string) {
-	uid, err := actor.Actor.PromptAndRetry(actor.Input("user id "), actor.CheckIsAPositiveNumber, func(s string) error {
+	uid, err := actor.PromptAndRetry(actor.Input("user id "), actor.CheckIsAPositiveNumber, func(s string) error {
 		user, err := database.GetUser(s)
 		if err != nil {
 			return err
@@ -67,7 +67,7 @@ func (p *chargeParams) processInteract(args []string) {
 	u, _ := strconv.Atoi(uid)
 	p.userId = u
 
-	amount, err := actor.Actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
+	amount, err := actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
 		_, err := strconv.Atoi(s)
 		return err
 	})
@@ -77,7 +77,7 @@ func (p *chargeParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(amount)
 	p.amount = n
 
-	type_, err := actor.Actor.PromptOptional(actor.Input("type"), "amazon")
+	type_, err := actor.PromptOptional(actor.Input("type"), "amazon")
 	if err != nil {
 		utils.Logger.Fatal().Err(err).Msg("")
 	}
