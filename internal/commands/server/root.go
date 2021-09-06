@@ -8,6 +8,8 @@ func NewCommand() *cobra.Command {
 		Use:   "server",
 		Short: "server management",
 	}
-	cmd.AddCommand()
+	cmd.AddCommand(
+		CreateCommand(),
+	)
 	return cmd
 }
