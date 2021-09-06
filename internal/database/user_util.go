@@ -55,7 +55,7 @@ func PrintUsers(users []*User) {
 // GetUser return user which has same "id" given to param
 func GetUser(id interface{}) (*User, error) {
 	var user *User
-	result := DefaultClient.Preload(clause.Associations).First(&user, id)
+	result := Preload(clause.Associations).First(&user, id)
 	if result.RowsAffected == 0 {
 		return nil, errors.New("no user found")
 	}
