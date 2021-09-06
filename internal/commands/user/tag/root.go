@@ -2,8 +2,8 @@ package tag
 
 import "github.com/spf13/cobra"
 
-// TagCommand creates the "user tag" command
-func TagCommand() *cobra.Command {
+// NewCommand creates the "user tag" command
+func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "tag",
 		Short: "tag management",

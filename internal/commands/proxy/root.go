@@ -2,8 +2,8 @@ package proxy
 
 import "github.com/spf13/cobra"
 
-// ProxyCommand creates the "proxy" command
-func ProxyCommand() *cobra.Command {
+// NewCommand creates the "proxy" command
+func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "proxy",
 		Short: "proxy management",

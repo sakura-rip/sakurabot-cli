@@ -5,8 +5,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// UserCommand creates the "user" command
-func UserCommand() *cobra.Command {
+// NewCommand creates the "user" command
+func NewCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "user",
 		Short: "user management",
@@ -16,7 +16,7 @@ func UserCommand() *cobra.Command {
 		ListCommand(),
 		GetCommand(),
 		ChargeCommand(),
-		tag.TagCommand(),
+		tag.NewCommand(),
 	)
 	return cmd
 }

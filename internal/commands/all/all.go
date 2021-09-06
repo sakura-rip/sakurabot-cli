@@ -15,9 +15,9 @@ func BuildAllCommands() (*cobra.Command, error) {
 	}
 
 	rootCmd.AddCommand(
-		user.UserCommand(),
-		token.TokenCommand(),
-		proxy.ProxyCommand(),
+		user.NewCommand(),
+		token.NewCommand(),
+		proxy.NewCommand(),
 	)
 
 	return rootCmd, nil
