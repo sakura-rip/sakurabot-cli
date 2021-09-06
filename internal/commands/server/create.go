@@ -1,10 +1,13 @@
 package server
 
 import (
+	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
+	"strconv"
+	"strings"
 )
 
 var createParam = new(createParams)
@@ -49,7 +52,26 @@ func (p *createParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *createParams) processInteract(args []string) {
+	serverType, err := actor.PromptOptional("server type", "upcloud")
+	if err != nil {
+		utils.Logger.Fatal().Err(err).Msgf("")
+	}
+	p.serverType = serverType
 
+	ipCount, err := actor.PromptAndRetry("ip count", actor.CheckIsAPositiveNumber)
+	if err != nil {
+		utils.Logger.Fatal().Err(err).Msgf("")
+	}
+	n, _ := strconv.Atoi(ipCount)
+	p.ipCount = n
+
+	tags, err := actor.Prompt(actor.Input("user tags"))
+	if err != nil {
+		utils.Logger.Fatal().Err(err).Msg("")
+	}
+	if tags != "" {
+		p.tags = strings.Split(tags, ",")
+	}
 }
 
 // runCreateCommand execute "server create" command
