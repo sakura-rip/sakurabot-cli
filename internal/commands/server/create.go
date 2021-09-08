@@ -109,7 +109,7 @@ func (p *createParams) asUpcloudIpAddressSlice() request.CreateServerInterfaceSl
 	return ips
 }
 
-func (p *createParams) getSSHPublicKey() string {
+func (p *createParams) getSSHPublicKeyPath() string {
 	if p.pubKeyPath == "" {
 		//TODO: use github.com/lxn/walk
 		return ""
@@ -117,7 +117,7 @@ func (p *createParams) getSSHPublicKey() string {
 	return p.pubKeyPath
 }
 
-func (p *createParams) getSSHPrivateKey() string {
+func (p *createParams) getSSHPrivateKeyPath() string {
 	if p.privKeyPath == "" {
 		//TODO: use github.com/lxn/walk
 		return ""
@@ -136,7 +136,7 @@ func (p *createParams) createUpcloudServer() (*database.Server, error) {
 		},
 		LoginUser: &request.LoginUser{
 			CreatePassword: "no",
-			SSHKeys:        []string{createParam.getSSHKey()},
+			SSHKeys:        []string{string(utils.ReadAll(createParam.getSSHPublicKeyPath()))},
 		},
 		Plan:     "1xCPU-1GB",
 		Title:    createParam.serverName,
