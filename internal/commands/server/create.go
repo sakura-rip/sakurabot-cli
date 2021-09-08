@@ -28,18 +28,21 @@ func CreateCommand() *cobra.Command {
 
 // createParams add commands parameter
 type createParams struct {
-	serverType string `validate:"oneof=upcloud vultr"`
-	sshKeyPath string
-	serverName string
-	ipCount    int `validate:"gte=1,lt=6"`
-	tags       []string
+	serverType  string `validate:"oneof=upcloud vultr"`
+	pubKeyPath  string
+	privKeyPath string
+	serverName  string
+	ipCount     int `validate:"gte=1,lt=6"`
+	tags        []string
 }
 
 // getFlagSet returns the flagSet for createParams
 func (p *createParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
 	fs.StringVarP(&createParam.serverType, "type", "t", "", "server type (upcloud | vultr)")
-	fs.StringVarP(&createParam.sshKeyPath, "sshkey", "s", utils.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
+	fs.StringVar(&createParam.pubKeyPath, "pubkey", utils.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
+	fs.StringVar(&createParam.privKeyPath, "privkey", utils.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
+
 	fs.StringVarP(&createParam.serverName, "name", "n", "", "server name")
 	fs.IntVarP(&createParam.ipCount, "ipcount", "c", 1, "server ipv4 address count")
 	fs.StringArrayVarP(&createParam.tags, "tags", "t", []string{}, "server tags")
@@ -106,12 +109,20 @@ func (p *createParams) asUpcloudIpAddressSlice() request.CreateServerInterfaceSl
 	return ips
 }
 
-func (p *createParams) getSSHKey() string {
-	if p.sshKeyPath == "" {
+func (p *createParams) getSSHPublicKey() string {
+	if p.pubKeyPath == "" {
 		//TODO: use github.com/lxn/walk
 		return ""
 	}
-	return p.sshKeyPath
+	return p.pubKeyPath
+}
+
+func (p *createParams) getSSHPrivateKey() string {
+	if p.privKeyPath == "" {
+		//TODO: use github.com/lxn/walk
+		return ""
+	}
+	return p.privKeyPath
 }
 
 // createUpcloudServer create upcloud server for createParams value
