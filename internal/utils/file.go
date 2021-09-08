@@ -21,3 +21,11 @@ func ReadFileLines(path string) []string {
 	}
 	return lines
 }
+
+func ReadAll(path string) []byte {
+	file, err := os.ReadFile(path)
+	if err != nil {
+		Logger.Fatal().Err(err).Msg("failed open file")
+	}
+	return file
+}
