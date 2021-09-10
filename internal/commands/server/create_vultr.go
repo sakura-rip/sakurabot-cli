@@ -50,7 +50,7 @@ func (p *createParams) createVultrServer() (*database.Server, error) {
 		Hostname:   "sakura-bot",
 		EnableIPv6: govultr.BoolToBoolPtr(true),
 		Label:      createParam.serverName,
-		SSHKeys:    []string{string(file.ReadAll(createParam.pubKeyPath))},
+		SSHKeys:    []string{string(file.ReadAll(createParam.getSSHPublicKeyPath()))},
 	})
 	if err != nil {
 		return nil, err
