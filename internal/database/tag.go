@@ -8,7 +8,8 @@ type Tag struct {
 	Name        string `gorm:"unique"`
 	Description string
 
-	Tokens  []*Token  `gorm:"many2many:token_tag;"`
-	Users   []*User   `gorm:"many2many:user_tag"`
-	Servers []*Server `gorm:"many2many:server_tag;"`
+	Tokens   []*Token   `gorm:"many2many:token_tag;"`
+	Users    []*User    `gorm:"many2many:user_tag"`
+	Servers  []*Server  `gorm:"many2many:server_tag;"`
+	Products []*Product `gorm:"many2many:product_tag"`
 }
