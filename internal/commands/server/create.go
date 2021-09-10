@@ -91,11 +91,6 @@ func (p *createParams) processInteract(args []string) {
 	}
 }
 
-// createVultrServer create vultr server for createParams value
-func (p *createParams) createVultrServer() (*database.Server, error) {
-	return nil, nil
-}
-
 func (p *createParams) getSSHPublicKeyPath() string {
 	if p.pubKeyPath == "" {
 		//TODO: use github.com/lxn/walk
