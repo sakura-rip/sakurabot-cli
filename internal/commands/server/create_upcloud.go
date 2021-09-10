@@ -2,14 +2,17 @@ package server
 
 import (
 	"github.com/UpCloudLtd/upcloud-go-api/upcloud"
+	"github.com/UpCloudLtd/upcloud-go-api/upcloud/client"
 	"github.com/UpCloudLtd/upcloud-go-api/upcloud/request"
+	"github.com/UpCloudLtd/upcloud-go-api/upcloud/service"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/file"
+	"os"
 )
 
 // createUpcloudServer create upcloud server for createParams value
 func (p *createParams) createUpcloudServer() (*database.Server, error) {
-	cl := utils.NewUpcloudClient()
+	cl := service.New(client.New(os.Getenv("UPCLOUD_USER_NAME"), os.Getenv("UPCLOUD_PASSWORD")))
 	//TODO: handle create server
 	detail, err := cl.CreateServer(&request.CreateServerRequest{
 		Hostname: "sakura-bot",
@@ -18,7 +21,7 @@ func (p *createParams) createUpcloudServer() (*database.Server, error) {
 		},
 		LoginUser: &request.LoginUser{
 			CreatePassword: "no",
-			SSHKeys:        []string{string(utils.ReadAll(createParam.getSSHPublicKeyPath()))},
+			SSHKeys:        []string{string(file.ReadAll(createParam.getSSHPublicKeyPath()))},
 		},
 		Plan:     "1xCPU-1GB",
 		Title:    createParam.serverName,

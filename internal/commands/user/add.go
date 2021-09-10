@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -53,7 +53,7 @@ func (p *addParams) validate() error {
 // processParams process parameters variable
 func (p *addParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -61,13 +61,13 @@ func (p *addParams) processParams(args []string) {
 func (p *addParams) processInteract(args []string) {
 	name, err := actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
 	tags, err := actor.Prompt(actor.Input("user tags"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -75,7 +75,7 @@ func (p *addParams) processInteract(args []string) {
 
 	mids, err := actor.Prompt(actor.Input("user mids"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if mids != "" {
 		p.mids = strings.Split(mids, ",")
@@ -83,20 +83,20 @@ func (p *addParams) processInteract(args []string) {
 
 	email, err := actor.Prompt(actor.Input("user email"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
 	balance, err := actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
 	group, err := actor.Prompt(actor.Input("user group"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
@@ -126,7 +126,7 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	}
 	result := database.Create(user)
 	if result.Error != nil {
-		utils.Fatal().Err(result.Error).Msg("")
+		logger.Fatal().Err(result.Error).Msg("")
 	}
 	user.Print()
 }

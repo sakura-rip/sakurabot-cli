@@ -1,7 +1,8 @@
 package database
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/file"
+	logger2 "github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -9,7 +10,7 @@ import (
 	"os"
 )
 
-var DefaultClient = NewDatabase(utils.GetHomeDir()+"/.sakurabot-manager.db", false)
+var DefaultClient = NewDatabase(file.GetHomeDir()+"/.sakurabot-manager.db", false)
 
 func NewDatabase(path string, useMySql bool) *gorm.DB {
 	var db *gorm.DB
@@ -28,7 +29,7 @@ func NewDatabase(path string, useMySql bool) *gorm.DB {
 	}
 	err = db.AutoMigrate(&Tag{}, &User{}, &String{}, &Charge{}, &Token{}, &Proxy{}, &Server{})
 	if err != nil {
-		utils.Error().Err(err).Msg("")
+		logger2.Error().Err(err).Msg("")
 	}
 	return db
 }

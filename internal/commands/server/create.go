@@ -1,9 +1,11 @@
 package server
 
 import (
+	"github.com/google/uuid"
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/file"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -38,8 +40,8 @@ type createParams struct {
 func (p *createParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
 	fs.StringVarP(&createParam.serverType, "type", "t", "", "server type (upcloud | vultr)")
-	fs.StringVar(&createParam.pubKeyPath, "pubkey", utils.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
-	fs.StringVar(&createParam.privKeyPath, "privkey", utils.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
+	fs.StringVar(&createParam.pubKeyPath, "pubkey", file.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
+	fs.StringVar(&createParam.privKeyPath, "privkey", file.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
 
 	fs.StringVarP(&createParam.serverName, "name", "n", "", "server name")
 	fs.IntVarP(&createParam.ipCount, "ipcount", "c", 1, "server ipv4 address count")
@@ -55,11 +57,12 @@ func (p *createParams) validate() error {
 // processParams process parameters variable
 func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if p.serverName == "" {
-		uid := "pro-bot-" + utils.GenUUID()[:5]
-		utils.Info().Msgf("server name not given. use: %v", uid)
+		newUUID, _ := uuid.NewUUID()
+		uid := "pro-bot-" + newUUID.String()[:5]
+		logger.Info().Msgf("server name not given. use: %v", uid)
 		p.serverName = uid
 	}
 }
@@ -68,20 +71,20 @@ func (p *createParams) processParams(args []string) {
 func (p *createParams) processInteract(args []string) {
 	serverType, err := actor.PromptOptional("server type (upcloud | vultr)", "upcloud")
 	if err != nil {
-		utils.Fatal().Err(err).Msgf("")
+		logger.Fatal().Err(err).Msgf("")
 	}
 	p.serverType = serverType
 
 	ipCount, err := actor.PromptAndRetry("ip count", actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Fatal().Err(err).Msgf("")
+		logger.Fatal().Err(err).Msgf("")
 	}
 	n, _ := strconv.Atoi(ipCount)
 	p.ipCount = n
 
 	tags, err := actor.Prompt("server tags")
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -124,12 +127,12 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 	case "upcloud":
 		server, createErr = createParam.createUpcloudServer()
 	default:
-		utils.Fatal().Msgf("invalid server type")
+		logger.Fatal().Msgf("invalid server type")
 	}
 	if createErr != nil {
-		utils.Fatal().Err(createErr).Msgf("failed to create server")
+		logger.Fatal().Err(createErr).Msgf("failed to create server")
 	}
 
 	database.Create(&server)
-	utils.Info().Msgf("create server done")
+	logger.Info().Msgf("create server done")
 }

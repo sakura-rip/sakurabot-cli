@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -52,7 +52,7 @@ func (p *getParams) validate() error {
 // processParams process parameters variable
 func (p *getParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -60,19 +60,19 @@ func (p *getParams) processParams(args []string) {
 func (p *getParams) processInteract(args []string) {
 	name, err := actor.Prompt(actor.Input("user name"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
 	email, err := actor.Prompt(actor.Input("user email"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
 	tags, err := actor.Prompt(actor.Input("user tags"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -80,7 +80,7 @@ func (p *getParams) processInteract(args []string) {
 
 	mids, err := actor.Prompt(actor.Input("user mids"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if mids != "" {
 		p.mids = strings.Split(mids, ",")
@@ -88,7 +88,7 @@ func (p *getParams) processInteract(args []string) {
 
 	group, err := actor.Prompt(actor.Input("user group"))
 	if err != nil {
-		utils.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
@@ -127,7 +127,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 
 	var users []*database.User
 	if getParam.buildDatabaseQuery().Find(&users).RowsAffected == 0 {
-		utils.Fatal().Msg("no users found")
+		logger.Fatal().Msg("no users found")
 	}
 	//validate tags and mids
 	var resultUsers []*database.User
@@ -141,7 +141,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 		resultUsers = append(resultUsers, user)
 	}
 	if len(resultUsers) == 0 {
-		utils.Fatal().Msg("no users found")
+		logger.Fatal().Msg("no users found")
 	}
 	database.PrintUsers(resultUsers)
 }
