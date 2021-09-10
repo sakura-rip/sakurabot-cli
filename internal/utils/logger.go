@@ -2,7 +2,7 @@ package utils
 
 import "github.com/phuslu/log"
 
-var Logger = NewLogger()
+var DefaultLogger = NewLogger()
 
 func NewLogger() *log.Logger {
 	logger := &log.Logger{
@@ -15,4 +15,34 @@ func NewLogger() *log.Logger {
 		},
 	}
 	return logger
+}
+
+// Info starts a new message with info level.
+func Info() *log.Entry {
+	return DefaultLogger.Info()
+}
+
+// Warn starts a new message with warning level.
+func Warn() *log.Entry {
+	return DefaultLogger.Warn()
+}
+
+// Error starts a new message with error level.
+func Error() *log.Entry {
+	return DefaultLogger.Error()
+}
+
+// Fatal starts a new message with fatal level.
+func Fatal() *log.Entry {
+	return DefaultLogger.Fatal()
+}
+
+// Panic starts a new message with panic level.
+func Panic() *log.Entry {
+	return DefaultLogger.Panic()
+}
+
+// Log starts a new message with no level.
+func Log() *log.Entry {
+	return DefaultLogger.Log()
 }
