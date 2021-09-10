@@ -12,7 +12,7 @@ type Token struct {
 
 	IsUsed bool
 	Group  string
-	Tags   []*Tag `gorm:"many2many:tokens_tag;"`
+	Tags   []*Tag `gorm:"many2many:token_tag;"`
 }
 
 // GetTags return the string array of user tag

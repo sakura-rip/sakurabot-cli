@@ -2,9 +2,10 @@ package proxy
 
 import (
 	"fmt"
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/file"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -46,28 +47,28 @@ func (p *saveParams) validate() error {
 // processParams process parameters variable
 func (p *saveParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *saveParams) processInteract(args []string) {
-	formatType, err := actor.Actor.PromptOptional(actor.Input("proxy formatType"), "brightdata-datacenter")
+	formatType, err := actor.PromptOptional(actor.Input("proxy formatType"), "brightdata-datacenter")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.formatType = formatType
 
-	textPath, err := actor.Actor.Prompt(actor.Input("proxy textPath"), actor.CheckNotEmpty)
+	textPath, err := actor.Prompt(actor.Input("proxy textPath"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.textPath = textPath
 }
 
 func parseBrightDataDataCenterFormat(path string) []*database.Proxy {
 	var proxies []*database.Proxy
-	for _, line := range utils.ReadFileLines(path) {
+	for _, line := range file.ReadFileLines(path) {
 		proxyStr := strings.Split(line, ":")
 		host := proxyStr[0]
 		port := proxyStr[1]
@@ -101,7 +102,7 @@ func runSaveCommand(cmd *cobra.Command, args []string) {
 	for _, p := range proxies {
 		result := database.Create(&p)
 		if result.Error != nil {
-			utils.Logger.Error().Err(result.Error).Msg("")
+			logger.Error().Err(result.Error).Msg("")
 		}
 	}
 }

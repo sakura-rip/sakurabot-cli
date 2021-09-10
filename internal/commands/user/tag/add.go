@@ -1,9 +1,9 @@
 package tag
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -46,29 +46,29 @@ func (p *addParams) validate() error {
 // processParams process parameters variable
 func (p *addParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *addParams) processInteract(args []string) {
-	userId, err := actor.Actor.PromptAndRetry(actor.Input("user id"), actor.CheckIsAPositiveNumber, func(s string) error {
+	userId, err := actor.PromptAndRetry(actor.Input("user id"), actor.CheckIsAPositiveNumber, func(s string) error {
 		user, err := database.GetUser(s)
 		if err != nil {
 			return err
 		}
-		utils.Logger.Info().Msgf("user name: %v", user.Name)
+		logger.Info().Msgf("user name: %v", user.Name)
 		return nil
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(userId)
 	p.userId = n
 
-	tags, err := actor.Actor.Prompt(actor.Input("user tags"), actor.CheckNotEmpty)
+	tags, err := actor.Prompt(actor.Input("user tags"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -97,11 +97,11 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	addParam.processParams(args)
 	user, err := database.GetUser(addParam.userId)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	err = database.Model(user).Association("Tags").Append(addParam.DBTags())
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		logger.Error().Err(err).Msg("")
 	}
-	utils.Logger.Info().Msgf("DONE: add %v tags to user: [%v]", len(addParam.tags), user.Name)
+	logger.Info().Msgf("DONE: add %v tags to user: [%v]", len(addParam.tags), user.Name)
 }

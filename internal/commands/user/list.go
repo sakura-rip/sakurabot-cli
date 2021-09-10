@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -41,7 +41,7 @@ func (p *listParams) validate() error {
 // processParams process parameters variable
 func (p *listParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 

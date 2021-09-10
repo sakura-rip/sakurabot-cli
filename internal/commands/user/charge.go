@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -47,39 +47,39 @@ func (p *chargeParams) validate() error {
 // processParams process parameters variable
 func (p *chargeParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *chargeParams) processInteract(args []string) {
-	uid, err := actor.Actor.PromptAndRetry(actor.Input("user id "), actor.CheckIsAPositiveNumber, func(s string) error {
+	uid, err := actor.PromptAndRetry(actor.Input("user id "), actor.CheckIsAPositiveNumber, func(s string) error {
 		user, err := database.GetUser(s)
 		if err != nil {
 			return err
 		}
-		utils.Logger.Info().Msgf("user name: %v", user.Name)
+		logger.Info().Msgf("user name: %v", user.Name)
 		return nil
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	u, _ := strconv.Atoi(uid)
 	p.userId = u
 
-	amount, err := actor.Actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
+	amount, err := actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
 		_, err := strconv.Atoi(s)
 		return err
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(amount)
 	p.amount = n
 
-	type_, err := actor.Actor.PromptOptional(actor.Input("type"), "amazon")
+	type_, err := actor.PromptOptional(actor.Input("type"), "amazon")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.chargeType = type_
 
@@ -100,14 +100,14 @@ func runChargeCommand(cmd *cobra.Command, args []string) {
 
 	user, err := database.GetUser(chargeParam.userId)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	user.Balance += chargeParam.amount
 	database.Save(user)
 
 	err = database.Model(user).Association("Charges").Append(charge)
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		logger.Error().Err(err).Msg("")
 	}
-	utils.Logger.Info().Msgf("DONE: update amount to user:[%v]  %v JPY ", user.Name, chargeParam.amount)
+	logger.Info().Msgf("DONE: update amount to user:[%v]  %v JPY ", user.Name, chargeParam.amount)
 }

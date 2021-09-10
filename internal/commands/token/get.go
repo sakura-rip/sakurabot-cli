@@ -1,9 +1,9 @@
 package token
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -49,30 +49,30 @@ func (p *getParams) validate() error {
 // processParams process parameters variable
 func (p *getParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *getParams) processInteract(args []string) {
-	count, err := actor.Actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
+	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
-	tags, err := actor.Actor.Prompt(actor.Input("token tags"))
+	tags, err := actor.Prompt(actor.Input("token tags"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	group, err := actor.Actor.Prompt(actor.Input("token group"))
+	group, err := actor.Prompt(actor.Input("token group"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
@@ -99,7 +99,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 	getParam.processParams(args)
 	var tokens []*database.Token
 	if getParam.buildDatabaseQuery().Find(&tokens).RowsAffected == 0 {
-		utils.Logger.Fatal().Msg("no tokens found")
+		logger.Fatal().Msg("no tokens found")
 	}
 	//validate tags
 	var resultTokens []*database.Token
@@ -110,7 +110,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 		resultTokens = append(resultTokens, token)
 	}
 	if len(resultTokens) == 0 {
-		utils.Logger.Fatal().Msgf("no tokens found")
+		logger.Fatal().Msgf("no tokens found")
 	}
 	database.PrintTokens(resultTokens)
 }

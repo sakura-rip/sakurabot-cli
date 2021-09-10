@@ -3,9 +3,9 @@ package token
 import (
 	"github.com/line-org/line-account-generator/generator"
 	"github.com/line-org/lineall/lineapp/service/line"
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -60,36 +60,39 @@ func (p *createParams) validate() error {
 // processParams process parameters variable
 func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
+	}
+	if createParam.count <= 0 {
+		logger.Fatal().Msgf("count must be at least 1")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *createParams) processInteract(args []string) {
-	count, err := actor.Actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
+	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		logger.Fatal().Err(err)
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
-	appType, err := actor.Actor.PromptOptional(actor.Input("appType"), "android")
+	appType, err := actor.PromptOptional(actor.Input("appType"), "android")
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		logger.Fatal().Err(err)
 	}
 	p.appType = appType
 
-	tags, err := actor.Actor.Prompt(actor.Input("tags"))
+	tags, err := actor.Prompt(actor.Input("tags"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		logger.Fatal().Err(err)
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	group, err := actor.Actor.Prompt(actor.Input("group"))
+	group, err := actor.Prompt(actor.Input("group"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		logger.Fatal().Err(err)
 	}
 	p.group = group
 }
@@ -110,7 +113,7 @@ func (p *createParams) getAppType() line.ApplicationType {
 	case "lite":
 		return line.ApplicationType_ANDROIDLITE
 	}
-	utils.Logger.Fatal().Msg("wrong app type")
+	logger.Fatal().Msg("wrong app type")
 	return line.ApplicationType(-1)
 }
 
@@ -120,9 +123,6 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 		createParam.processInteract(args)
 	}
 	createParam.processParams(args)
-	if createParam.count <= 0 {
-		utils.Logger.Fatal().Msgf("count must be at least 1")
-	}
 	var successCount int
 	wg := &sync.WaitGroup{}
 	for i := 0; i < createParam.count; i++ {
@@ -136,16 +136,16 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 			defer wg.Done()
 			err := cl.Start()
 			if err != nil {
-				utils.Logger.Error().Err(err).Int("idx", i).Msg("failed to generate account")
+				logger.Error().Err(err).Int("idx", i).Msg("failed to generate account")
 				return
 			}
 			result, err := cl.GetResult()
 			if err != nil {
-				utils.Logger.Error().Err(err).Int("idx", i).Msg("failed to get generation result")
+				logger.Error().Err(err).Int("idx", i).Msg("failed to get generation result")
 				return
 			}
 			successCount++
-			utils.Logger.Info().Int("idx", i).Msgf("successfully create account %v/%v", successCount, createParam.count)
+			logger.Info().Int("idx", i).Msgf("successfully create account %v/%v", successCount, createParam.count)
 			database.Create(&database.Token{
 				Account: result,
 				Group:   createParam.group,
@@ -157,5 +157,5 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 		time.Sleep(time.Second * 5)
 	}
 	wg.Wait()
-	utils.Logger.Info().Msgf("create %d accounts done, Group: %v", successCount, createParam.group)
+	logger.Info().Msgf("create %d accounts done, Group: %v", successCount, createParam.group)
 }

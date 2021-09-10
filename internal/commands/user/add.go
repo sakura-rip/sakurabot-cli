@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
@@ -53,50 +53,50 @@ func (p *addParams) validate() error {
 // processParams process parameters variable
 func (p *addParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 }
 
 // processInteract process interact parameter initializer
 func (p *addParams) processInteract(args []string) {
-	name, err := actor.Actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
+	name, err := actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
-	tags, err := actor.Actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt(actor.Input("user tags"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	mids, err := actor.Actor.Prompt(actor.Input("user mids"))
+	mids, err := actor.Prompt(actor.Input("user mids"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	if mids != "" {
 		p.mids = strings.Split(mids, ",")
 	}
 
-	email, err := actor.Actor.Prompt(actor.Input("user email"))
+	email, err := actor.Prompt(actor.Input("user email"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
-	balance, err := actor.Actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
+	balance, err := actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
-	group, err := actor.Actor.Prompt(actor.Input("user group"))
+	group, err := actor.Prompt(actor.Input("user group"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		logger.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
@@ -126,7 +126,7 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	}
 	result := database.Create(user)
 	if result.Error != nil {
-		utils.Logger.Fatal().Err(result.Error).Msg("")
+		logger.Fatal().Err(result.Error).Msg("")
 	}
 	user.Print()
 }

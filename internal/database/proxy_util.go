@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/utils"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"net/url"
 )
 
@@ -10,7 +10,7 @@ func GetRandomFreeProxy(count int) []*Proxy {
 	var proxies []*Proxy
 	result := Limit(count).Where(map[string]interface{}{"is_used": false}).Find(&proxies)
 	if result.RowsAffected != int64(count) {
-		utils.Logger.Fatal().Msg("cant get free proxy")
+		logger.Fatal().Msg("cant get free proxy")
 	}
 	return proxies
 }
