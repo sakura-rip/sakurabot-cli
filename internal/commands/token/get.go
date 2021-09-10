@@ -1,8 +1,8 @@
 package token
 
 import (
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"

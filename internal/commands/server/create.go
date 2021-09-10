@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/google/uuid"
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/file"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"

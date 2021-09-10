@@ -3,8 +3,8 @@ package token
 import (
 	"github.com/line-org/line-account-generator/generator"
 	"github.com/line-org/lineall/lineapp/service/line"
-	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
+	actor "github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
