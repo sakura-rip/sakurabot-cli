@@ -7,13 +7,44 @@ import (
 	"github.com/UpCloudLtd/upcloud-go-api/upcloud/service"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/pkg/file"
+	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"os"
+	"time"
 )
+
+// isUpcloudServerTagCreated check if tag is already created at upcloud
+func (p *createParams) isUpcloudServerTagCreated(tag *upcloud.Tags, tagName string) bool {
+	for _, t := range tag.Tags {
+		if t.Name == tagName {
+			return true
+		}
+	}
+	return false
+}
+
+// tagUpcloudServer tag upcloud server
+func (p *createParams) tagUpcloudServer(cl *service.Service, uuid string, tags []string) error {
+	upcloudTags, err := cl.GetTags()
+	if err != nil {
+		return err
+	}
+	for _, tagName := range tags {
+		if p.isUpcloudServerTagCreated(upcloudTags, tagName) {
+			if _, err := cl.TagServer(&request.TagServerRequest{UUID: uuid, Tags: []string{tagName}}); err != nil {
+				return err
+			}
+		} else {
+			if _, err := cl.CreateTag(&request.CreateTagRequest{Tag: upcloud.Tag{Name: tagName, Servers: []string{uuid}}}); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
 
 // createUpcloudServer create upcloud server for createParams value
 func (p *createParams) createUpcloudServer() (*database.Server, error) {
 	cl := service.New(client.New(os.Getenv("UPCLOUD_USER_NAME"), os.Getenv("UPCLOUD_PASSWORD")))
-	//TODO: handle create server
 	detail, err := cl.CreateServer(&request.CreateServerRequest{
 		Hostname: "sakura-bot",
 		Networking: &request.CreateServerNetworking{
@@ -31,6 +62,20 @@ func (p *createParams) createUpcloudServer() (*database.Server, error) {
 	if err != nil {
 		return nil, err
 	}
+	logger.Info().Msgf("waiting for server to start")
+
+	if _, err = cl.WaitForServerState(&request.WaitForServerStateRequest{
+		UUID:         detail.UUID,
+		DesiredState: upcloud.ServerStateStarted,
+		Timeout:      time.Minute * 7,
+	}); err != nil {
+		logger.Fatal().Err(err).Msgf("failed to wait for server start")
+	}
+	logger.Info().Msgf("server started")
+	if err := p.tagUpcloudServer(cl, detail.UUID, createParam.tags); err != nil {
+		logger.Fatal().Err(err).Msgf("failed to tag server")
+	}
+
 	return &database.Server{
 		IP:         detail.IPAddresses[0].Address,
 		ServerType: database.ServerTypeUPCLOUD,
