@@ -62,6 +62,7 @@ func (p *createParams) createUpcloudServer() (*database.Server, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	logger.Info().Msgf("waiting for server to start")
 
 	if _, err = cl.WaitForServerState(&request.WaitForServerStateRequest{
@@ -71,7 +72,9 @@ func (p *createParams) createUpcloudServer() (*database.Server, error) {
 	}); err != nil {
 		logger.Fatal().Err(err).Msgf("failed to wait for server start")
 	}
+
 	logger.Info().Msgf("server started")
+
 	if err := p.tagUpcloudServer(cl, detail.UUID, createParam.tags); err != nil {
 		logger.Fatal().Err(err).Msgf("failed to tag server")
 	}
