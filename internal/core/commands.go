@@ -9,7 +9,7 @@ import (
 func ExecuteCommands() error {
 	root, err := all.BuildAllCommands()
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("failed to build commands")
+		utils.Error().Err(err).Msg("failed to build commands")
 	}
 	return root.Execute()
 }

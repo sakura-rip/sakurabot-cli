@@ -60,10 +60,10 @@ func (p *createParams) validate() error {
 // processParams process parameters variable
 func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if createParam.count <= 0 {
-		utils.Logger.Fatal().Msgf("count must be at least 1")
+		utils.Fatal().Msgf("count must be at least 1")
 	}
 }
 
@@ -71,20 +71,20 @@ func (p *createParams) processParams(args []string) {
 func (p *createParams) processInteract(args []string) {
 	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		utils.Fatal().Err(err)
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
 	appType, err := actor.PromptOptional(actor.Input("appType"), "android")
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		utils.Fatal().Err(err)
 	}
 	p.appType = appType
 
 	tags, err := actor.Prompt(actor.Input("tags"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		utils.Fatal().Err(err)
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -92,7 +92,7 @@ func (p *createParams) processInteract(args []string) {
 
 	group, err := actor.Prompt(actor.Input("group"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err)
+		utils.Fatal().Err(err)
 	}
 	p.group = group
 }
@@ -113,7 +113,7 @@ func (p *createParams) getAppType() line.ApplicationType {
 	case "lite":
 		return line.ApplicationType_ANDROIDLITE
 	}
-	utils.Logger.Fatal().Msg("wrong app type")
+	utils.Fatal().Msg("wrong app type")
 	return line.ApplicationType(-1)
 }
 
@@ -136,16 +136,16 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 			defer wg.Done()
 			err := cl.Start()
 			if err != nil {
-				utils.Logger.Error().Err(err).Int("idx", i).Msg("failed to generate account")
+				utils.Error().Err(err).Int("idx", i).Msg("failed to generate account")
 				return
 			}
 			result, err := cl.GetResult()
 			if err != nil {
-				utils.Logger.Error().Err(err).Int("idx", i).Msg("failed to get generation result")
+				utils.Error().Err(err).Int("idx", i).Msg("failed to get generation result")
 				return
 			}
 			successCount++
-			utils.Logger.Info().Int("idx", i).Msgf("successfully create account %v/%v", successCount, createParam.count)
+			utils.Info().Int("idx", i).Msgf("successfully create account %v/%v", successCount, createParam.count)
 			database.Create(&database.Token{
 				Account: result,
 				Group:   createParam.group,
@@ -157,5 +157,5 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 		time.Sleep(time.Second * 5)
 	}
 	wg.Wait()
-	utils.Logger.Info().Msgf("create %d accounts done, Group: %v", successCount, createParam.group)
+	utils.Info().Msgf("create %d accounts done, Group: %v", successCount, createParam.group)
 }

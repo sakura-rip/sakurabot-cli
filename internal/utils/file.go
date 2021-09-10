@@ -8,7 +8,7 @@ import (
 func ReadFileLines(path string) []string {
 	file, err := os.Open(path)
 	if err != nil {
-		Logger.Fatal().Err(err).Msg("failed open file")
+		DefaultLogger.Fatal().Err(err).Msg("failed open file")
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -17,7 +17,7 @@ func ReadFileLines(path string) []string {
 		lines = append(lines, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
-		Logger.Fatal().Err(err).Msg("scanner error")
+		DefaultLogger.Fatal().Err(err).Msg("scanner error")
 	}
 	return lines
 }
@@ -25,7 +25,7 @@ func ReadFileLines(path string) []string {
 func ReadAll(path string) []byte {
 	file, err := os.ReadFile(path)
 	if err != nil {
-		Logger.Fatal().Err(err).Msg("failed open file")
+		DefaultLogger.Fatal().Err(err).Msg("failed open file")
 	}
 	return file
 }

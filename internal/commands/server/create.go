@@ -1,8 +1,6 @@
 package server
 
 import (
-	"github.com/UpCloudLtd/upcloud-go-api/upcloud"
-	"github.com/UpCloudLtd/upcloud-go-api/upcloud/request"
 	"github.com/sakura-rip/sakurabot-cli/internal/actor"
 	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/internal/utils"
@@ -57,11 +55,11 @@ func (p *createParams) validate() error {
 // processParams process parameters variable
 func (p *createParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if p.serverName == "" {
 		uid := "pro-bot-" + utils.GenUUID()[:5]
-		utils.Logger.Info().Msgf("server name not given. use: %v", uid)
+		utils.Info().Msgf("server name not given. use: %v", uid)
 		p.serverName = uid
 	}
 }
@@ -70,20 +68,20 @@ func (p *createParams) processParams(args []string) {
 func (p *createParams) processInteract(args []string) {
 	serverType, err := actor.PromptOptional("server type (upcloud | vultr)", "upcloud")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msgf("")
+		utils.Fatal().Err(err).Msgf("")
 	}
 	p.serverType = serverType
 
 	ipCount, err := actor.PromptAndRetry("ip count", actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msgf("")
+		utils.Fatal().Err(err).Msgf("")
 	}
 	n, _ := strconv.Atoi(ipCount)
 	p.ipCount = n
 
 	tags, err := actor.Prompt("server tags")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -126,12 +124,12 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 	case "upcloud":
 		server, createErr = createParam.createUpcloudServer()
 	default:
-		utils.Logger.Fatal().Msgf("invalid server type")
+		utils.Fatal().Msgf("invalid server type")
 	}
 	if createErr != nil {
-		utils.Logger.Fatal().Err(createErr).Msgf("failed to create server")
+		utils.Fatal().Err(createErr).Msgf("failed to create server")
 	}
 
 	database.Create(&server)
-	utils.Logger.Info().Msgf("create server done")
+	utils.Info().Msgf("create server done")
 }

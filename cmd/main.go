@@ -10,7 +10,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if err := core.ExecuteCommands(); err != nil {
 		os.Exit(1)

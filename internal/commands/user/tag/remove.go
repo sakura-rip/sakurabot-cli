@@ -46,7 +46,7 @@ func (p *removeParams) validate() error {
 // processParams process parameters variable
 func (p *removeParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -57,17 +57,17 @@ func (p *removeParams) processInteract(args []string) {
 		if err != nil {
 			return err
 		}
-		utils.Logger.Info().Msgf("user name: %v", user.Name)
+		utils.Info().Msgf("user name: %v", user.Name)
 		return nil
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(userId)
 	p.userId = n
 	tags, err := actor.PromptAndRetry(actor.Input("user tags"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -96,12 +96,12 @@ func runRemoveCommand(cmd *cobra.Command, args []string) {
 
 	user, err := database.GetUser(removeParam.userId)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 
 	err = database.Model(user).Association("Tags").Delete(removeParam.getMatchedTags(user.Tags))
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Error().Err(err).Msg("")
 	}
-	utils.Logger.Info().Msgf("DONE: remove %v tags from user: [%v]", len(removeParam.tags), user.Name)
+	utils.Info().Msgf("DONE: remove %v tags from user: [%v]", len(removeParam.tags), user.Name)
 }

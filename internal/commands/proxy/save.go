@@ -46,7 +46,7 @@ func (p *saveParams) validate() error {
 // processParams process parameters variable
 func (p *saveParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -54,13 +54,13 @@ func (p *saveParams) processParams(args []string) {
 func (p *saveParams) processInteract(args []string) {
 	formatType, err := actor.PromptOptional(actor.Input("proxy formatType"), "brightdata-datacenter")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	p.formatType = formatType
 
 	textPath, err := actor.Prompt(actor.Input("proxy textPath"), actor.CheckNotEmpty)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	p.textPath = textPath
 }
@@ -101,7 +101,7 @@ func runSaveCommand(cmd *cobra.Command, args []string) {
 	for _, p := range proxies {
 		result := database.Create(&p)
 		if result.Error != nil {
-			utils.Logger.Error().Err(result.Error).Msg("")
+			utils.Error().Err(result.Error).Msg("")
 		}
 	}
 }

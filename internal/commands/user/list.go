@@ -41,7 +41,7 @@ func (p *listParams) validate() error {
 // processParams process parameters variable
 func (p *listParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 }
 

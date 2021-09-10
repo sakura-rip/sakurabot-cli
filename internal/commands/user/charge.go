@@ -47,7 +47,7 @@ func (p *chargeParams) validate() error {
 // processParams process parameters variable
 func (p *chargeParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -58,11 +58,11 @@ func (p *chargeParams) processInteract(args []string) {
 		if err != nil {
 			return err
 		}
-		utils.Logger.Info().Msgf("user name: %v", user.Name)
+		utils.Info().Msgf("user name: %v", user.Name)
 		return nil
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	u, _ := strconv.Atoi(uid)
 	p.userId = u
@@ -72,14 +72,14 @@ func (p *chargeParams) processInteract(args []string) {
 		return err
 	})
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(amount)
 	p.amount = n
 
 	type_, err := actor.PromptOptional(actor.Input("type"), "amazon")
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	p.chargeType = type_
 
@@ -100,14 +100,14 @@ func runChargeCommand(cmd *cobra.Command, args []string) {
 
 	user, err := database.GetUser(chargeParam.userId)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	user.Balance += chargeParam.amount
 	database.Save(user)
 
 	err = database.Model(user).Association("Charges").Append(charge)
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Error().Err(err).Msg("")
 	}
-	utils.Logger.Info().Msgf("DONE: update amount to user:[%v]  %v JPY ", user.Name, chargeParam.amount)
+	utils.Info().Msgf("DONE: update amount to user:[%v]  %v JPY ", user.Name, chargeParam.amount)
 }

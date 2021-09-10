@@ -49,7 +49,7 @@ func (p *getParams) validate() error {
 // processParams process parameters variable
 func (p *getParams) processParams(args []string) {
 	if err := p.validate(); err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 }
 
@@ -57,14 +57,14 @@ func (p *getParams) processParams(args []string) {
 func (p *getParams) processInteract(args []string) {
 	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
 	tags, err := actor.Prompt(actor.Input("token tags"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	if tags != "" {
 		p.tags = strings.Split(tags, ",")
@@ -72,7 +72,7 @@ func (p *getParams) processInteract(args []string) {
 
 	group, err := actor.Prompt(actor.Input("token group"))
 	if err != nil {
-		utils.Logger.Fatal().Err(err).Msg("")
+		utils.Fatal().Err(err).Msg("")
 	}
 	p.group = group
 }
@@ -99,7 +99,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 	getParam.processParams(args)
 	var tokens []*database.Token
 	if getParam.buildDatabaseQuery().Find(&tokens).RowsAffected == 0 {
-		utils.Logger.Fatal().Msg("no tokens found")
+		utils.Fatal().Msg("no tokens found")
 	}
 	//validate tags
 	var resultTokens []*database.Token
@@ -110,7 +110,7 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 		resultTokens = append(resultTokens, token)
 	}
 	if len(resultTokens) == 0 {
-		utils.Logger.Fatal().Msgf("no tokens found")
+		utils.Fatal().Msgf("no tokens found")
 	}
 	database.PrintTokens(resultTokens)
 }

@@ -10,7 +10,7 @@ func GetRandomFreeProxy(count int) []*Proxy {
 	var proxies []*Proxy
 	result := Limit(count).Where(map[string]interface{}{"is_used": false}).Find(&proxies)
 	if result.RowsAffected != int64(count) {
-		utils.Logger.Fatal().Msg("cant get free proxy")
+		utils.Fatal().Msg("cant get free proxy")
 	}
 	return proxies
 }

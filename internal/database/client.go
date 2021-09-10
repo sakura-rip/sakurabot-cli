@@ -28,7 +28,7 @@ func NewDatabase(path string, useMySql bool) *gorm.DB {
 	}
 	err = db.AutoMigrate(&Tag{}, &User{}, &String{}, &Charge{}, &Token{}, &Proxy{}, &Server{})
 	if err != nil {
-		utils.Logger.Error().Err(err).Msg("")
+		utils.Error().Err(err).Msg("")
 	}
 	return db
 }
