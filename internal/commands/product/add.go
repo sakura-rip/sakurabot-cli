@@ -1,10 +1,13 @@
 package product
 
 import (
+	"github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
+	"strconv"
+	"strings"
 )
 
 var addParam = new(addParams)
@@ -22,9 +25,9 @@ func AddCommand() *cobra.Command {
 
 // addParams add commands parameter
 type addParams struct {
-	name        string
-	description string
-	price       int
+	name        string `validate:"required"`
+	description string `validate:"required"`
+	price       int    `validate:"gte=1"`
 	tags        []string
 }
 
@@ -52,7 +55,35 @@ func (p *addParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *addParams) processInteract(args []string) {
+	name, err := actor.PromptAndRetry(actor.Input("product name"), actor.CheckNotEmpty)
+	if err != nil {
+		logger.Fatal().Err(err).Msg("")
+	}
+	p.name = name
 
+	description, err := actor.Prompt(actor.Input("product description"))
+	if err != nil {
+		logger.Fatal().Err(err).Msg("")
+	}
+	p.description = description
+
+	price, err := actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
+		_, err := strconv.Atoi(s)
+		return err
+	})
+	if err != nil {
+		logger.Fatal().Err(err).Msg("")
+	}
+	n, _ := strconv.Atoi(price)
+	p.price = n
+
+	tags, err := actor.Prompt(actor.Input("user tags"))
+	if err != nil {
+		logger.Fatal().Err(err).Msg("")
+	}
+	if tags != "" {
+		p.tags = strings.Split(tags, ",")
+	}
 }
 
 // runAddCommand execute "product add" command
