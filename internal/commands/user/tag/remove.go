@@ -33,8 +33,8 @@ type removeParams struct {
 // getFlagSet returns the flagSet for removeParams
 func (p *removeParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.IntVarP(&removeParam.userId, "userid", "u", 0, "user id")
-	fs.StringArrayVarP(&removeParam.tags, "tags", "t", []string{}, "tags")
+	fs.IntVarP(&p.userId, "userid", "u", 0, "user id")
+	fs.StringArrayVarP(&p.tags, "tags", "t", []string{}, "tags")
 	return fs
 }
 

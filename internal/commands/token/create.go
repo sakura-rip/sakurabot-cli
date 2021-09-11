@@ -42,13 +42,13 @@ type createParams struct {
 // getFlagSet returns the flagSet for createParams
 func (p *createParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.IntVarP(&createParam.count, "count", "c", 1, "tokens count")
-	fs.BoolVarP(&createParam.manually, "manually", "m", false, "create manually?")
-	fs.BoolVarP(&createParam.debug, "debug", "d", false, "debug")
-	fs.StringVarP(&createParam.appType, "apptype", "a", "android", "application type")
-	fs.StringVarP(&createParam.proxy, "proxy", "p", "", "proxy url")
-	fs.StringArrayVarP(&createParam.tags, "tags", "t", []string{}, "tags")
-	fs.StringVarP(&createParam.group, "group", "g", "", "group")
+	fs.IntVarP(&p.count, "count", "c", 1, "tokens count")
+	fs.BoolVarP(&p.manually, "manually", "m", false, "create manually?")
+	fs.BoolVarP(&p.debug, "debug", "d", false, "debug")
+	fs.StringVarP(&p.appType, "apptype", "a", "android", "application type")
+	fs.StringVarP(&p.proxy, "proxy", "p", "", "proxy url")
+	fs.StringArrayVarP(&p.tags, "tags", "t", []string{}, "tags")
+	fs.StringVarP(&p.group, "group", "g", "", "group")
 	return fs
 }
 

@@ -39,13 +39,13 @@ type createParams struct {
 // getFlagSet returns the flagSet for createParams
 func (p *createParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.StringVarP(&createParam.serverType, "type", "t", "", "server type (upcloud | vultr)")
-	fs.StringVar(&createParam.pubKeyPath, "pubkey", file.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
-	fs.StringVar(&createParam.privKeyPath, "privkey", file.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
+	fs.StringVarP(&p.serverType, "type", "t", "", "server type (upcloud | vultr)")
+	fs.StringVar(&p.pubKeyPath, "pubkey", file.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
+	fs.StringVar(&p.privKeyPath, "privkey", file.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
 
-	fs.StringVarP(&createParam.serverName, "name", "n", "", "server name")
-	fs.IntVarP(&createParam.ipCount, "ipcount", "c", 1, "server ipv4 address count")
-	fs.StringArrayVarP(&createParam.tags, "tags", "t", []string{}, "server tags")
+	fs.StringVarP(&p.serverName, "name", "n", "", "server name")
+	fs.IntVarP(&p.ipCount, "ipcount", "c", 1, "server ipv4 address count")
+	fs.StringArrayVarP(&p.tags, "tags", "t", []string{}, "server tags")
 	return fs
 }
 

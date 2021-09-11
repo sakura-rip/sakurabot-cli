@@ -34,8 +34,8 @@ type saveParams struct {
 // getFlagSet returns the flagSet for saveParams
 func (p *saveParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.StringVarP(&saveParam.formatType, "format", "f", "brightdata-datacenter", "specific proxy type(brightdata-datacenter)")
-	fs.StringVarP(&saveParam.textPath, "path", "p", "", "specific proxy data path")
+	fs.StringVarP(&p.formatType, "format", "f", "brightdata-datacenter", "specific proxy type(brightdata-datacenter)")
+	fs.StringVarP(&p.textPath, "path", "p", "", "specific proxy data path")
 	return fs
 }
 

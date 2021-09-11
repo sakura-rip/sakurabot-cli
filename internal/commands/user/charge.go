@@ -33,9 +33,9 @@ type chargeParams struct {
 // getFlagSet returns the flagSet for chargeParams
 func (p *chargeParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.IntVarP(&chargeParam.userId, "userid", "u", 0, "user id to charge")
-	fs.IntVarP(&chargeParam.amount, "amount", "a", 0, "amount to charge")
-	fs.StringVarP(&chargeParam.chargeType, "type", "t", "", "charge type")
+	fs.IntVarP(&p.userId, "userid", "u", 0, "user id to charge")
+	fs.IntVarP(&p.amount, "amount", "a", 0, "amount to charge")
+	fs.StringVarP(&p.chargeType, "type", "t", "", "charge type")
 	return fs
 }
 

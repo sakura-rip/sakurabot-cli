@@ -35,9 +35,9 @@ type getParams struct {
 // getFlagSet returns the flagSet for getParams
 func (p *getParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.IntVarP(&getParam.count, "count", "c", 1, "token count")
-	fs.StringVarP(&getParam.group, "group", "g", "", "group")
-	fs.StringArrayVarP(&getParam.tags, "tags", "t", []string{}, "tags")
+	fs.IntVarP(&p.count, "count", "c", 1, "token count")
+	fs.StringVarP(&p.group, "group", "g", "", "group")
+	fs.StringArrayVarP(&p.tags, "tags", "t", []string{}, "tags")
 	return fs
 }
 

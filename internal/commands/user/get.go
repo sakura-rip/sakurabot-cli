@@ -36,11 +36,11 @@ type getParams struct {
 // getFlagSet returns the flagSet for getParams
 func (p *getParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.StringVarP(&getParam.name, "name", "n", "", "user name")
-	fs.StringVarP(&getParam.email, "email", "e", "", "user email")
-	fs.StringArrayVarP(&getParam.tags, "tags", "t", []string{}, "user tags")
-	fs.StringArrayVarP(&getParam.mids, "mids", "m", []string{}, "user mids")
-	fs.StringVarP(&getParam.group, "group", "g", "", "user group")
+	fs.StringVarP(&p.name, "name", "n", "", "user name")
+	fs.StringVarP(&p.email, "email", "e", "", "user email")
+	fs.StringArrayVarP(&p.tags, "tags", "t", []string{}, "user tags")
+	fs.StringArrayVarP(&p.mids, "mids", "m", []string{}, "user mids")
+	fs.StringVarP(&p.group, "group", "g", "", "user group")
 	return fs
 }
 
