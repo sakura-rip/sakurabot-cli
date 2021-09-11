@@ -39,7 +39,7 @@ type createParams struct {
 // getFlagSet returns the flagSet for createParams
 func (p *createParams) getFlagSet() *pflag.FlagSet {
 	fs := new(pflag.FlagSet)
-	fs.StringVarP(&p.serverType, "type", "t", "", "server type (upcloud | vultr)")
+	fs.StringVar(&p.serverType, "type", "", "server type (upcloud | vultr)")
 	fs.StringVar(&p.pubKeyPath, "pubkey", file.GetHomeDir()+"/.ssh/id_rsa.pub", "ssh public key")
 	fs.StringVar(&p.privKeyPath, "privkey", file.GetHomeDir()+"/.ssh/id_rsa", "ssh private key")
 
