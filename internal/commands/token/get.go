@@ -55,14 +55,14 @@ func (p *getParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *getParams) processInteract(args []string) {
-	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
+	count, err := actor.PromptAndRetry("count", actor.CheckIsAPositiveNumber)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
-	tags, err := actor.Prompt(actor.Input("token tags"))
+	tags, err := actor.Prompt("token tags")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
@@ -70,7 +70,7 @@ func (p *getParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	group, err := actor.Prompt(actor.Input("token group"))
+	group, err := actor.Prompt("token group")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}

@@ -53,13 +53,13 @@ func (p *saveParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *saveParams) processInteract(args []string) {
-	formatType, err := actor.PromptOptional(actor.Input("proxy formatType"), "brightdata-datacenter")
+	formatType, err := actor.PromptOptional("proxy formatType", "brightdata-datacenter")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.formatType = formatType
 
-	textPath, err := actor.Prompt(actor.Input("proxy textPath"), actor.CheckNotEmpty)
+	textPath, err := actor.Prompt("proxy textPath", actor.CheckNotEmpty)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}

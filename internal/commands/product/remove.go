@@ -49,7 +49,7 @@ func (p *removeParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *removeParams) processInteract(args []string) {
-	price, err := actor.PromptAndRetry(actor.Input("product id"), func(s string) error {
+	price, err := actor.PromptAndRetry("product id", func(s string) error {
 		_, err := strconv.Atoi(s)
 		return err
 	})

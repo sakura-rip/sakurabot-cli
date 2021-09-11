@@ -58,19 +58,19 @@ func (p *getParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *getParams) processInteract(args []string) {
-	name, err := actor.Prompt(actor.Input("user name"))
+	name, err := actor.Prompt("user name")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
-	email, err := actor.Prompt(actor.Input("user email"))
+	email, err := actor.Prompt("user email")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
-	tags, err := actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt("user tags")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
@@ -78,7 +78,7 @@ func (p *getParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	mids, err := actor.Prompt(actor.Input("user mids"))
+	mids, err := actor.Prompt("user mids")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
@@ -86,7 +86,7 @@ func (p *getParams) processInteract(args []string) {
 		p.mids = strings.Split(mids, ",")
 	}
 
-	group, err := actor.Prompt(actor.Input("user group"))
+	group, err := actor.Prompt("user group")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}

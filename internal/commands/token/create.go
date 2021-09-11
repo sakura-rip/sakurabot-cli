@@ -69,20 +69,20 @@ func (p *createParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *createParams) processInteract(args []string) {
-	count, err := actor.PromptAndRetry(actor.Input("count"), actor.CheckIsAPositiveNumber)
+	count, err := actor.PromptAndRetry("count", actor.CheckIsAPositiveNumber)
 	if err != nil {
 		logger.Fatal().Err(err)
 	}
 	n, _ := strconv.Atoi(count)
 	p.count = n
 
-	appType, err := actor.PromptOptional(actor.Input("appType"), "android")
+	appType, err := actor.PromptOptional("appType", "android")
 	if err != nil {
 		logger.Fatal().Err(err)
 	}
 	p.appType = appType
 
-	tags, err := actor.Prompt(actor.Input("tags"))
+	tags, err := actor.Prompt("tags")
 	if err != nil {
 		logger.Fatal().Err(err)
 	}
@@ -90,7 +90,7 @@ func (p *createParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	group, err := actor.Prompt(actor.Input("group"))
+	group, err := actor.Prompt("group")
 	if err != nil {
 		logger.Fatal().Err(err)
 	}

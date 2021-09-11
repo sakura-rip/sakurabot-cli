@@ -56,19 +56,19 @@ func (p *addParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *addParams) processInteract(args []string) {
-	name, err := actor.PromptAndRetry(actor.Input("product name"), actor.CheckNotEmpty)
+	name, err := actor.PromptAndRetry("product name", actor.CheckNotEmpty)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
-	description, err := actor.Prompt(actor.Input("product description"))
+	description, err := actor.Prompt("product description")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.description = description
 
-	price, err := actor.PromptAndRetry(actor.Input("amount"), func(s string) error {
+	price, err := actor.PromptAndRetry("price", func(s string) error {
 		_, err := strconv.Atoi(s)
 		return err
 	})
@@ -78,7 +78,7 @@ func (p *addParams) processInteract(args []string) {
 	n, _ := strconv.Atoi(price)
 	p.price = n
 
-	tags, err := actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt("user tags")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}

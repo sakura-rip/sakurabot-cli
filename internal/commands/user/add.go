@@ -59,13 +59,13 @@ func (p *addParams) processParams(args []string) {
 
 // processInteract process interact parameter initializer
 func (p *addParams) processInteract(args []string) {
-	name, err := actor.PromptAndRetry(actor.Input("user name"), actor.CheckNotEmpty)
+	name, err := actor.PromptAndRetry("user name", actor.CheckNotEmpty)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.name = name
 
-	tags, err := actor.Prompt(actor.Input("user tags"))
+	tags, err := actor.Prompt("user tags")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
@@ -73,7 +73,7 @@ func (p *addParams) processInteract(args []string) {
 		p.tags = strings.Split(tags, ",")
 	}
 
-	mids, err := actor.Prompt(actor.Input("user mids"))
+	mids, err := actor.Prompt("user mids")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
@@ -81,20 +81,20 @@ func (p *addParams) processInteract(args []string) {
 		p.mids = strings.Split(mids, ",")
 	}
 
-	email, err := actor.Prompt(actor.Input("user email"))
+	email, err := actor.Prompt("user email")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	p.email = email
 
-	balance, err := actor.PromptAndRetry(actor.Input("user balance"), actor.CheckIsAPositiveNumber)
+	balance, err := actor.PromptAndRetry("user balance", actor.CheckIsAPositiveNumber)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
 	n, _ := strconv.Atoi(balance)
 	p.balance = n
 
-	group, err := actor.Prompt(actor.Input("user group"))
+	group, err := actor.Prompt("user group")
 	if err != nil {
 		logger.Fatal().Err(err).Msg("")
 	}
