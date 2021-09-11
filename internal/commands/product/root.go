@@ -10,6 +10,7 @@ func NewCommand() *cobra.Command {
 	}
 	cmd.AddCommand(
 		AddCommand(),
+		RemoveCommand(),
 	)
 	return cmd
 }
