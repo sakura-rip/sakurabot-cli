@@ -54,6 +54,16 @@ func Save(value interface{}) *gorm.DB {
 	return DefaultClient.Save(value)
 }
 
+// Delete value match given conditions, if the value has primary key, then will including the primary key as condition
+func Delete(value interface{}, conds ...interface{}) *gorm.DB {
+	return DefaultClient.Delete(value, conds)
+}
+
+// First find record that match given conditions, order by primary key
+func First(dest interface{}, conds ...interface{}) *gorm.DB {
+	return DefaultClient.First(dest, conds)
+}
+
 // Model specify the model you would like to run db operations
 func Model(value interface{}) *gorm.DB {
 	return DefaultClient.Model(value)
