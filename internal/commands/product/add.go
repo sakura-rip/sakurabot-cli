@@ -1,6 +1,7 @@
 package product
 
 import (
+	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
@@ -93,4 +94,16 @@ func runAddCommand(cmd *cobra.Command, args []string) {
 	}
 	addParam.processParams(args)
 
+	product := &database.Product{
+		Model:       nil,
+		Name:        addParam.name,
+		Description: addParam.description,
+		Price:       addParam.price,
+		Tags:        database.StringsToDBTags(addParam.tags),
+	}
+	result := database.Create(product)
+	if result.Error != nil {
+		logger.Fatal().Err(result.Error).Msg("")
+	}
+	product.Print()
 }
