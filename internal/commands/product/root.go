@@ -8,6 +8,8 @@ func NewCommand() *cobra.Command {
 		Use:   "product",
 		Short: "product management",
 	}
-	cmd.AddCommand()
+	cmd.AddCommand(
+		AddCommand(),
+	)
 	return cmd
 }
