@@ -28,7 +28,7 @@ func (p *Product) Print() {
 func PrintProducts(users []*Product) {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"id", "name", "tags", "email", "balance", "group"})
+	t.AppendHeader(table.Row{"id", "name", "description", "tags", "price"})
 	var data []table.Row
 	for _, p := range users {
 		data = append(data, table.Row{p.ID, p.Name, p.Description, strings.Join(p.GetTags(), ","), p.Price})
