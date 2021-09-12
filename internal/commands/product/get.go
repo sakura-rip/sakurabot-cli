@@ -1,11 +1,13 @@
 package product
 
 import (
+	"github.com/sakura-rip/sakurabot-cli/internal/database"
 	"github.com/sakura-rip/sakurabot-cli/pkg/actor"
 	"github.com/sakura-rip/sakurabot-cli/pkg/logger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"gopkg.in/go-playground/validator.v9"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )
@@ -86,6 +88,29 @@ func (p *getParams) processInteract(args []string) {
 	p.price = n
 }
 
+// buildDatabaseQuery return the query for database search
+func (p *getParams) buildDatabaseQuery() *gorm.DB {
+	query := database.DefaultClient
+	if getParam.name != "" {
+		query = query.Where("name LIKE ?", "%"+getParam.name+"%")
+	}
+
+	if getParam.description != "" {
+		query = query.Where("description LIKE ?", "%"+getParam.description+"%")
+	}
+
+	if len(getParam.tags) != 0 {
+		query = query.Preload("Tags", "name IN ? ", getParam.tags)
+	} else {
+		query = query.Preload("Tags")
+	}
+
+	if getParam.price != 0 {
+		query = query.Where("price = ?", getParam.price)
+	}
+	return query
+}
+
 // runGetCommand execute "product get" command
 func runGetCommand(cmd *cobra.Command, args []string) {
 	if cmd.Flags().NFlag() == 0 {
@@ -93,4 +118,21 @@ func runGetCommand(cmd *cobra.Command, args []string) {
 	}
 	getParam.processParams(args)
 
+	var products []*database.Product
+	if getParam.buildDatabaseQuery().Find(&products).RowsAffected == 0 {
+		logger.Fatal().Msg("no products found")
+	}
+
+	//validate tags
+	var resultProducts []*database.Product
+	for _, product := range products {
+		if len(getParam.tags) != 0 && len(product.Tags) == 0 {
+			continue
+		}
+		resultProducts = append(resultProducts, product)
+	}
+	if len(resultProducts) == 0 {
+		logger.Fatal().Msg("no products found")
+	}
+	database.PrintProducts(resultProducts)
 }
