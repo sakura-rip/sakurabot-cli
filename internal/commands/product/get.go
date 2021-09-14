@@ -81,11 +81,10 @@ func (p *getParams) processInteract(args []string) {
 		_, err := strconv.Atoi(s)
 		return err
 	})
-	if err != nil {
-		logger.Fatal().Err(err).Msg("")
+	if err == nil {
+		n, _ := strconv.Atoi(price)
+		p.price = n
 	}
-	n, _ := strconv.Atoi(price)
-	p.price = n
 }
 
 // buildDatabaseQuery return the query for database search
